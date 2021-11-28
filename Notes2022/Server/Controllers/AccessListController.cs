@@ -82,6 +82,7 @@ namespace Notes2022.Server.Controllers
             work.EditAccess = item.EditAccess;
 
             _db.Update(work);
+            _db.Entry(work).State = EntityState.Modified;
             await _db.SaveChangesAsync();
         }
 
