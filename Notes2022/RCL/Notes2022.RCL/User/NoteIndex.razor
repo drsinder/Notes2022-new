@@ -1,0 +1,130 @@
+﻿@*--------------------------------------------------------------------------
+    **
+    **  Copyright © 2022, Dale Sinder
+    **
+    **  Name: NoteIndex.razor
+    **
+    **  Description: Displays the main file index grid
+    **     Base notes and expands to show responses
+    **
+    **  This program is free software: you can redistribute it and/or modify
+    **  it under the terms of the GNU General Public License version 3 as
+    **  published by the Free Software Foundation.
+    **
+    **  This program is distributed in the hope that it will be useful,
+    **  but WITHOUT ANY WARRANTY; without even the implied warranty of
+    **  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    **  GNU General Public License version 3 for more details.
+    **
+    **  You should have received a copy of the GNU General Public License
+    **  version 3 along with this program in file "license-gpl-3.0.txt".
+    **  If not, see <http://www.gnu.org/licenses/gpl-3.0.txt>.
+    **
+    **--------------------------------------------------------------------------*@
+
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Buttons
+
+@if (CurrentNoteId > 0)
+{
+    <NotePanel NoteId="@CurrentNoteId" ShowChild="false" IsRootNote="true" MyNoteIndex="@this"></NotePanel>}
+else
+{
+    <h3>Note Index</h3>
+
+    @if (Model == null)
+    {
+        <p class="center"><em>Loading...</em></p>
+    }
+    else
+    {
+        <p>@Model.message</p>
+        <h3 class="center">@Model.noteFile.NoteFileTitle - @Model.noteFile.NoteFileName</h3>
+
+        <div>
+            <ListMenu Model=@Model Caller="@this" @ref="@MyMenu"></ListMenu>
+        </div>
+        @if (@Model.myAccess.ReadAccess && Model.Notes?.Count > 0)
+        {
+            <div class="col-lg-12 control-section dialoglist">
+                <div class="content-wrapper">
+                    <div class="row">
+                        Show Content on Expand&nbsp; <SfSwitch @bind-Checked="@ShowContent"></SfSwitch>&nbsp;
+                        Show All Response Content on Expand&nbsp; <SfSwitch @bind-Checked="@ShowContentR"></SfSwitch>&nbsp;
+                        Expand All&nbsp; <SfSwitch @bind-Checked="@ExpandAll" ValueChange="ExpandAllChange" TChecked="bool"></SfSwitch>
+                        <SfGrid @ref="@sfGrid1" DataSource="@Model.Notes" AllowPaging="true" AllowSelection="true" EnableHover="true" AllowSorting="true" AllowFiltering="true">
+
+                            <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu">
+                                <GridFilterColumns>
+                                    <GridFilterColumn Field="IsDeleted" MatchCase=true Operator="Operator.Equal" Predicate="and" Value="@false"></GridFilterColumn>
+                                    <GridFilterColumn Field="Version" MatchCase=true Operator="Operator.Equal" Predicate="and" Value="0"></GridFilterColumn>
+                                </GridFilterColumns>
+                            </GridFilterSettings>
+
+                            <GridEvents RowSelected="DisplayIt" OnActionComplete="ActionCompleteHandler" TValue="NoteHeader"></GridEvents>
+                            <GridPageSettings @ref="@PageSettings" PageSizes="true" PageSize="@PageSize" CurrentPage="@CurPage"></GridPageSettings>
+                            <GridTemplates>
+                                <DetailTemplate>
+                                    @{
+                            var current = (context as NoteHeader);
+                            List<NoteHeader> Resp = Model.AllNotes.Where(p => p.NoteOrdinal == current.NoteOrdinal && p.ResponseOrdinal != 0).OrderBy(p => p.ResponseOrdinal).ToList();
+                        }
+                        @if (ShowContent)
+                        {
+                            <NotePanel NoteId="@current.Id" ShowChild="false" IsRootNote="false" IsMini="true"></NotePanel>
+                        }
+
+                        <Responses Headers="Resp" ShowContentR="ShowContentR" ExpandAllR="ExpandAll"></Responses>
+
+                    </DetailTemplate>
+                </GridTemplates>
+                <GridColumns>
+                    <GridColumn Field=@nameof(NoteHeader.NoteOrdinal) HeaderText="#" TextAlign="TextAlign.Left" Width="25" IsPrimaryKey="true"></GridColumn>
+                    <GridColumn Field=@nameof(NoteHeader.NoteSubject) HeaderText="Subject" TextAlign="TextAlign.Left" Width="150"></GridColumn>
+                    <GridColumn Field=@nameof(NoteHeader.AuthorName) HeaderText="Writer" TextAlign="TextAlign.Left" Width="80"></GridColumn>
+                    <GridColumn Field=@nameof(NoteHeader.CreateDate) HeaderText="Date/Time" TextAlign="TextAlign.Left" Width="60">
+                        <Template Context="inner">
+                            @{
+                                var itemx = (inner as NoteHeader);
+                                <span>@Globals.LocalTimeBlazor(itemx.CreateDate)</span>
+                            }
+                        </Template>
+
+                    </GridColumn>
+                    <GridColumn Field=@nameof(NoteHeader.ResponseCount) HeaderText="Responses" TextAlign="TextAlign.Left" Width="40"></GridColumn>
+                    <GridColumn Field=@nameof(NoteHeader.IsDeleted) HeaderText="Del" TextAlign="TextAlign.Left" Width="0" Type="ColumnType.Boolean"></GridColumn>
+                    <GridColumn Field=@nameof(NoteHeader.Version) HeaderText="Version" TextAlign="TextAlign.Left" Width="0"></GridColumn>
+
+                </GridColumns>
+            </SfGrid>
+        </div>
+    </div>
+</div>
+            <div class="arrow1">
+                <div>
+                    Navigate: <SfTextBox @ref="@sfTextBox" ShowClearButton="true" Placeholder="b# | b#.r#*"
+                             @bind-Value="@NavString" Input="@NavInputHandler" @onkeyup="@KeyUpHandler"></SfTextBox>
+                </div>
+            </div>
+        }
+        else
+        {
+
+        }
+
+    }
+
+}
+
+<style>
+    /*to disable the mouse actions*/
+    .e-detail-disable .e-detailrowcollapse {
+        pointer-events: none;
+    }
+
+        /*if required hide the icons*/
+        .e-detail-disable .e-detailrowcollapse .e-icon-grightarrow {
+            visibility: hidden;
+        }
+</style>

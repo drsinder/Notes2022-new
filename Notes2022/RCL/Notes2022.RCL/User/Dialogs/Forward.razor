@@ -1,0 +1,44 @@
+﻿@*--------------------------------------------------------------------------
+    **
+    **  Copyright © 2022, Dale Sinder
+    **
+    **  Name: Forward.razor
+    **
+    **  Description:
+    **      Collect an email address and send stuff to it
+    **
+    **  This program is free software: you can redistribute it and/or modify
+    **  it under the terms of the GNU General Public License version 3 as
+    **  published by the Free Software Foundation.
+    **
+    **  This program is distributed in the hope that it will be useful,
+    **  but WITHOUT ANY WARRANTY; without even the implied warranty of
+    **  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    **  GNU General Public License version 3 for more details.
+    **
+    **  You should have received a copy of the GNU General Public License
+    **  version 3 along with this program in file "license-gpl-3.0.txt".
+    **  If not, see <http: //www.gnu.org/licenses/gpl-3.0.txt>.
+    **
+    **--------------------------------------------------------------------------*@
+
+@using Notes2022.Shared
+@using System.Text
+@inject HttpClient Http
+
+<div class="dialogs medium-input">
+
+    <h2>Forward Note(s)</h2>
+    <h4>@ForwardView.NoteSubject</h4>
+    <p>Forward to:</p>
+    <input type="text" @bind-value="@ForwardView.ToEmail" class="medium-input-minus"/>
+    <br /><br />Forward whole string?: <input type="checkbox" @bind-value="@ForwardView.wholestring" />
+
+    <br /> <br />
+    <button type="button" @onclick="Forwardit" class="btn btn-success btn-sm"><img src="icons/glyphicons-basic-435-forward-email.svg" width="25" class="svgwhite" /> Forward</button>
+    <button type="button" @onclick="Cancel" class="btn btn-info btn-sm">
+        Cancel
+    </button>
+</div>
+
+

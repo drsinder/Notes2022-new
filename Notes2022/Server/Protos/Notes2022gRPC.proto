@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+option csharp_namespace = "Notes2022.Server.Protos";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+package notes2022grpc;
+
+service Notes2022gRPC {
+	
+	rpc GetAbout (google.protobuf.Empty) returns (GetAboutResponse);
+
+	rpc GetAccessList (GetAccessListRequest) returns (NoteAccessList);
+}
+
+message GetAboutResponse {
+	About about = 1;
+}
+
+message About {
+	string PrimeAdminName = 1;
+	string PrimeAdminEmail = 2;
+	google.protobuf.Timestamp StartupDateTime = 3;
+
+}
+
+message GetAccessListRequest {
+	int32 fileId = 1;
+}
+
+message NoteAccessList {
+	repeated NoteAccess AccessList = 1;
+}
+
+message NoteAccess {
+	string UserId = 1;
+	int32 NoteFileId = 2;
+	int32 ArchiveId = 3;
+	bool ReadAccess = 4;
+	bool Respond = 5;
+	bool Write = 6;
+	bool SetTag = 7;
+	bool DeleteEdit = 8;
+	bool ViewAccess = 9;
+	bool EditAccess = 10;
+}
+

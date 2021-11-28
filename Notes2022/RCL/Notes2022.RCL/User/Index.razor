@@ -1,0 +1,142 @@
+﻿@*--------------------------------------------------------------------------
+    **
+    **  Copyright © 2022, Dale Sinder
+    **
+    **  Name: Index.razor
+    **
+    **  Description:
+    **      Root of the app
+    **
+    **  This program is free software: you can redistribute it and/or modify
+    **  it under the terms of the GNU General Public License version 3 as
+    **  published by the Free Software Foundation.
+    **
+    **  This program is distributed in the hope that it will be useful,
+    **  but WITHOUT ANY WARRANTY; without even the implied warranty of
+    **  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    **  GNU General Public License version 3 for more details.
+    **
+    **  You should have received a copy of the GNU General Public License
+    **  version 3 along with this program in file "license-gpl-3.0.txt".
+    **  If not, see <http://www.gnu.org/licenses/gpl-3.0.txt>.
+    **
+    **--------------------------------------------------------------------------*@
+
+<PageTitle>Notes 2022 Index</PageTitle>
+
+<h2 class="center">Welcome to Notes 2022 @Globals.UserData?.DisplayName <img src="favicon.ico" width="32" /></h2>
+
+<div>
+
+    @if (false && hpModel == null)
+    {
+        <p class=""><em>Loading...</em></p>
+    }
+    else
+    {
+        <h5 class="center">
+            <span id="homepagetime">
+                @mytime
+            </span>
+        </h5>
+
+        @if (hpModel != null && !string.IsNullOrEmpty(hpModel.Message))
+        {
+            <div>@((MarkupString)@hpModel.Message)</div>
+        }
+    } 
+    @if (IsPreview)
+    {
+        <div>Preview MODE!</div>
+    }
+    else
+    {
+        
+        <AuthorizeView>
+        <NotAuthorized>
+            <p class="center"><strong>You are not logged in.  Please log in.  Register first if you need to.</strong></p>
+        </NotAuthorized>
+        <Authorized>
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4 roundedindex keep-center">
+                    <EditForm Model="@dummyFile">
+                        <ChildContent Context="Typer">
+                            <p class="center">
+                                <label>
+                                    <strong>Enter a NoteFile Name and press Enter:</strong>
+                                    <InputText class="form-control short-input"
+                                               ValueChanged="@( (string val) => TextHasChanged(val) )"
+                                               Value="@dummyFile.NoteFileName"
+                                               ValueExpression="@( () => dummyFile.NoteFileName )" />
+                                </label>
+                            </p>
+                            <p class="center">
+                                Or select a file<br />
+                                <InputSelect id="select1" class="btn btn-file dropdown-toggle form-control short-input"
+                                             ValueChanged="@( (string val) => TextHasChanged(val) )"
+                                             Value="@dummyFile.NoteFileName"
+                                             ValueExpression="@( () => dummyFile.NoteFileName )">
+                                    <option value="none" selected="selected">-- Select from list --</option>
+                                    @foreach (var item in fileList)
+                                    {
+                                        <option value=@item.NoteFileName>@item.NoteFileName</option>
+                                    }
+                                </InputSelect>
+                            </p>
+                            <p class="center">
+                                Or select a title<br />
+                                <InputSelect id="select2" class="btn btn-title dropdown-toggle form-control short-input"
+                                             ValueChanged="@( (string val) => TextHasChanged(val) )"
+                                             Value="@dummyFile.NoteFileName"
+                                             ValueExpression="@( () => dummyFile.NoteFileName )">
+                                    <option value="none" selected="selected">-- Select from list --</option>
+                                    @foreach (var item in nameList)
+                                    {
+                                        <option value=@item.NoteFileName>@item.NoteFileTitle</option>
+                                    }
+                                </InputSelect>
+
+                            </p>
+                        </ChildContent>
+                    </EditForm>
+                    <p class="center">
+                        <a href="notesfiles"><strong>List of all NotesFiles</strong></a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-4">
+                    <h4>Important Files</h4>
+                    <ul>
+                        @foreach (localFile x in impfileList)
+                        {
+                            <li>
+                                <FileButton NoteFile="@x"></FileButton>
+                            </li>
+                        }
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h4>History Files</h4>
+                    <ul>
+                        @foreach (localFile x in histfileList)
+                        {
+                            <li>
+                                <FileButton NoteFile="@x"></FileButton>
+                            </li>
+                        }
+                    </ul>
+                </div>
+
+            </div>
+        </Authorized>
+    </AuthorizeView>
+
+
+}
+</div>
+

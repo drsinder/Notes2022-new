@@ -1,0 +1,20 @@
+﻿
+<div class="dialogs">
+    <h3>User Role Editor</h3>
+    <div>
+        @if (Model == null)
+        {
+            <p class="center"><em>Loading...</em></p>
+        }
+        else
+        {
+            @Model.UserData.DisplayName<br />
+            foreach (CheckedUser item in Model.RolesList)
+            {
+                <SfCheckBox @bind-Checked="@item.isMember" Label="@item.theRole.Name"></SfCheckBox><span>&nbsp;&nbsp;&nbsp;</span>
+            }
+            <br /><br />
+            <button type="button" @onclick="@Submit">Submit</button> <button type="button" @onclick="@Done">Close</button>
+        }
+    </div>
+</div>

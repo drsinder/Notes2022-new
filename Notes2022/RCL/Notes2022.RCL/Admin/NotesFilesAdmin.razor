@@ -1,0 +1,93 @@
+﻿
+@using Notes2022.RCL.Admin.Dialogs
+
+<PageTitle>Notes 2022 NoteFile Index</PageTitle>
+
+<h3>Notes Files Admin</h3>
+
+@if (files == null)
+{
+    <p class="center"><em>Loading...</em></p>
+}
+else
+{
+            @message
+            <p>
+                <button @onclick="@(() => CreateNoteFile(0))" class="btn-file">Create Note File</button>
+                @if (todo.Contains("announce"))
+                {
+                    <button @onclick="CreateAnnounce" class="btn-file">Create Announce</button>
+                }
+                @if (todo.Contains("pbnotes"))
+                {
+                    <button @onclick="CreatePbnotes" class="btn-file">Create Pbnotes</button>
+                }
+                @if (todo.Contains("noteshelp"))
+                {
+                    <button @onclick="CreateNotesHelp" class="btn-file">Create Noteshelp</button>
+                }
+                @if (todo.Contains("pad"))
+                {
+                    <button @onclick="CreatePad" class="btn-file">Create Pad</button>
+                }
+                @if (todo.Contains("homepagemessages"))
+                {
+                    <button @onclick="CreateHomePageMessages" class="btn-file">Create Home Page Messages</button>
+                }
+            </p>
+
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            NoteFile Name
+                        </th>
+                        <th>
+                            NoteFile Title
+                        </th>
+                        <th>
+                            Last Edited
+                        </th>
+                        <th>
+                            Owner
+                        </th>
+                        <th>
+                            Id
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (NoteFile file in files)
+                    {
+                        <tr>
+                            <td>
+                                @file.NoteFileName
+                            </td>
+                            <td>
+                                @file.NoteFileTitle
+                            </td>
+                            <td>
+                                @Globals.LocalTimeBlazor(file.LastEdited).ToShortTimeString() @Globals.LocalTimeBlazor(file.LastEdited).ToShortDateString()
+                            </td>
+                            <td>
+                                @model.UserListData.Find(p => p.UserId == file.OwnerId).DisplayName
+                            </td>
+                            <td>
+                                @file.Id
+                            </td>
+                            <td>
+                                <button @onclick="@(() => EditNoteFile(file.Id))">Edit</button>
+                                <button @onclick="@(() => NoteFileDetails(file.Id))">Details</button>
+                                <button @onclick="@(() => DeleteNoteFile(file.Id))">Delete</button>
+                                <button @onclick="@(() => ImportNoteFile(file.Id))">Import</button>
+                             </td>
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+}

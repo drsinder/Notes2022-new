@@ -1,0 +1,63 @@
+﻿@*--------------------------------------------------------------------------
+    **
+    **  Copyright © 2022, Dale Sinder
+    **
+    **  Name: SCheckBox.razor
+    **
+    **  Description:
+    **      CheckBox used in sequencer editor
+    **
+    **  This program is free software: you can redistribute it and/or modify
+    **  it under the terms of the GNU General Public License version 3 as
+    **  published by the Free Software Foundation.
+    **
+    **  This program is distributed in the hope that it will be useful,
+    **  but WITHOUT ANY WARRANTY; without even the implied warranty of
+    **  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    **  GNU General Public License version 3 for more details.
+    **
+    **  You should have received a copy of the GNU General Public License
+    **  version 3 along with this program in file "license-gpl-3.0.txt".
+    **  If not, see <http://www.gnu.org/licenses/gpl-3.0.txt>.
+    **
+    **--------------------------------------------------------------------------*@
+
+@using Notes2022.Shared
+@using System.Text
+
+@inject HttpClient Http
+@inject NavigationManager NavMan
+
+<SfCheckBox @bind-Checked="isChecked" @onclick="OnClick"></SfCheckBox>
+
+@code {
+    [Parameter] public Tracker Tracker {get; set;}
+    [Parameter] public int fileId { get; set; }
+    [Parameter] public bool isChecked { get; set; }
+
+    public SCheckModel Model { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        Model = new SCheckModel
+        {
+            isChecked = isChecked,
+            fileId = fileId
+        };
+    }
+
+    public async Task OnClick()
+    {
+        isChecked = !isChecked;
+
+        if (isChecked) // create item
+        {
+            await DAL.CreateSequencer(Http, Model);
+        }
+        else // delete it
+        {
+            await DAL.DeleteSequencer(Http, fileId);
+        }
+        await Tracker.Shuffle();
+    }
+}

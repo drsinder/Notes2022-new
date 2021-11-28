@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="Notes2022.Shared.AboutModel">
+    <Position X="0.75" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAABCA=</HashCode>
+      <FileName>NotesModels\AboutModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Notes2022.Shared.AccessItem">
+    <Position X="0.75" Y="2.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAAAAAAAAAAAAAAAEQAAAAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>NotesModels\AccessItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Notes2022.Shared.CopyModel">
+    <Position X="0.75" Y="6.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAIAA=</HashCode>
+      <FileName>NotesModels\CopyModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Notes2022.Shared.CreateFileModel">
+    <Position X="3.5" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>NotesModels\CreateFileModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Notes2022.Shared.DisplayModel">
+    <Position X="3.5" Y="2.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAACAAQAQAAAAAAAAAAAAAAACAAAAAAAAADAAAAAAgA=</HashCode>
+      <FileName>NotesModels\DisplayModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Notes2022.Shared.CheckedUser">
+    <Position X="3.5" Y="6.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAABAAAAAAA=</HashCode>
+      <FileName>NotesModels\EditUserViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Notes2022.Shared.EditUserViewModel">
+    <Position X="3.5" Y="4.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAA=</HashCode>
+      <FileName>NotesModels\EditUserViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Notes2022.Shared.EmailModel">
+    <Position X="6.5" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAgAAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>NotesModels\EmailModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Notes2022.Shared.ExportViewModel">
+    <Position X="6.5" Y="2.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEASAAAEAAAAAgAAAAAAAAAAAAAgQCAAAAAAA=</HashCode>
+      <FileName>NotesModels\ExportViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Notes2022.Shared.ForwardViewModel">
+    <Position X="6.5" Y="5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAwAAAAAAIAAAAAAAAgAAAACCAAAAAAAGACAAIAEAA=</HashCode>
+      <FileName>NotesModels\ForwardViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Notes2022.Shared.HomePageModel">
+    <Position X="9.25" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAACIAAIAAA=</HashCode>
+      <FileName>NotesModels\HomePageModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Notes2022.Shared.JsonExport">
+    <Position X="9.25" Y="2.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>NotesModels\JsonExport.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Notes2022.Shared.MarkedOutputModel">
+    <Position X="9.25" Y="4.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAEAAAAAAAAAAAAABAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>NotesModels\MarkedOutputModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Notes2022.Shared.NoteDisplayIndexModel">
+    <Position X="12.25" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAQwAAAAGAAAAAABABAAQAAAAAAAAAAAAAAAAAAIAqE=</HashCode>
+      <FileName>NotesModels\NoteDisplayIndexModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Notes2022.Shared.Stringy">
+    <Position X="9.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>NotesModels\Stringy.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Notes2022.Shared.TextViewModel">
+    <Position X="12.5" Y="4.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAgAAAAAAAAAAAACCAQIAABAAAAAAAABA=</HashCode>
+      <FileName>NotesModels\TextViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Notes2022.Shared.SCheckModel">
+    <Position X="12.5" Y="7.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>NotesModels\TextViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="Notes2022.Shared.AccessX">
+    <Position X="0.75" Y="4.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAQAAAAAAAAAAAAAAIAAgAIAAAAAAFAAAA=</HashCode>
+      <FileName>NotesModels\AccessItem.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

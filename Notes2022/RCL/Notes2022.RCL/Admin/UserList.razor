@@ -1,0 +1,34 @@
+﻿
+@if (UList == null)
+{
+    <p class="center"><em>Loading...</em></p>
+}
+else
+{
+    <h3>User List</h3>
+
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>User Name</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (UserData item in UList)
+                {
+                    <tr>
+                        <td>@item.DisplayName</td>
+                        <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td>
+                            <button @onclick="@(() => EditLink(item.UserId))">Edit</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+}

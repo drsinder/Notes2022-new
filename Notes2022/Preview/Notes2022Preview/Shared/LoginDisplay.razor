@@ -1,0 +1,54 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using Syncfusion.Blazor.Buttons
+
+@inject NavigationManager Navigation
+@inject SignOutSessionStateManager SignOutManager
+
+@if (IsPreview)
+{
+    <SfButton @onclick="GotoHome" class="homebutton">Home</SfButton>
+}
+else
+{
+    <AuthorizeView>
+        <Authorized>
+            <SfButton @onclick="GotoProfile" class="logbutton">@context.User.Identity?.Name</SfButton>
+            <SfButton @onclick="BeginSignOut" class="logbutton">Log out</SfButton>
+            <SfButton @onclick="GotoHome" class="homebutton">Home</SfButton>
+        </Authorized>
+        <NotAuthorized>
+            <SfButton @onclick="GotoRegister" class="logbutton">Register</SfButton>
+            &nbsp;&nbsp;<SfButton @onclick="GotoLogin" class="logbutton">Login</SfButton>&nbsp;&nbsp;
+            <SfButton @onclick="GotoHome" class="homebutton">Home</SfButton>
+        </NotAuthorized>
+    </AuthorizeView>
+}
+
+<style>
+    .logbutton {
+        color: white;
+        background-color: darkcyan;
+        margin-right: 5px;
+        margin-left: 5px;
+        border-radius: 6px;
+    }
+
+        .logbutton:hover {
+            color: white;
+            background-color: blue;
+        }
+
+    .homebutton {
+        color: white;
+        background-color: darkblue;
+        margin-right: 5px;
+        margin-left: 5px;
+        border-radius: 6px;
+    }
+
+        .homebutton:hover {
+            color: white;
+            background-color: blue;
+        }
+</style>

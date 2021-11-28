@@ -1,0 +1,73 @@
+﻿@*--------------------------------------------------------------------------
+    **
+    **  Copyright © 2022, Dale Sinder
+    **
+    **  Name: CreateNoteFile.razor
+    **
+    **  Description:
+    **      Note File Creation Dialog
+    **
+    **  This program is free software: you can redistribute it and/or modify
+    **  it under the terms of the GNU General Public License version 3 as
+    **  published by the Free Software Foundation.
+    **
+    **  This program is distributed in the hope that it will be useful,
+    **  but WITHOUT ANY WARRANTY; without even the implied warranty of
+    **  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    **  GNU General Public License version 3 for more details.
+    **
+    **  You should have received a copy of the GNU General Public License
+    **  version 3 along with this program in file "license-gpl-3.0.txt".
+    **  If not, see <http://www.gnu.org/licenses/gpl-3.0.txt>.
+    **
+    **--------------------------------------------------------------------------*@
+
+@inject HttpClient Http
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+@if (dummyFile == null)
+{
+    <p class="center"><em>Loading...</em></p>
+}
+else
+{
+            <div class="dialogs modal-body">
+                <h3>Create Note File:</h3>
+                <EditForm id="createform" Model="@dummyFile" OnValidSubmit="HandleValidSubmit">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <strong>Enter a NoteFile Name:</strong>
+                    <InputText id="name" @bind-Value="dummyFile.NoteFileName" class="form-control short-input" />
+                    <strong>Enter a NoteFile Title:</strong>
+                    <InputText id="title" @bind-Value="dummyFile.NoteFileTitle" class="form-control short-input" />
+                    <button type="submit">Submit</button> <button type="button" @onclick="Cancel">Cancel</button>
+                </EditForm>
+            </div>
+}
+
+
+
+@code {
+    [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
+
+    [Parameter] public int FileId { get; set; }
+
+    public CreateFileModel dummyFile = new CreateFileModel();
+
+    private async Task HandleValidSubmit()
+    {
+
+        CreateFileModel crm = new CreateFileModel { NoteFileName = dummyFile.NoteFileName, NoteFileTitle = dummyFile.NoteFileTitle };
+
+        await DAL.CreateNoteFile(Http, crm);
+
+        await ModalInstance.CloseAsync();
+    }
+
+    private void Cancel()
+    {
+        ModalInstance.CancelAsync();
+    }
+
+
+}

@@ -1,0 +1,73 @@
+﻿@*--------------------------------------------------------------------------
+    **
+    ** Copyright © 2022, Dale Sinder
+    **
+    ** Name: Responses.razor
+    **
+    ** Description:
+    **      Displays response headers (and content) inside the NoteIndex
+    **
+    ** This program is free software: you can redistribute it and/or modify
+    ** it under the terms of the GNU General Public License version 3 as
+    ** published by the Free Software Foundation.   
+    **
+    ** This program is distributed in the hope that it will be useful,
+    ** but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+    ** GNU General Public License version 3 for more details.
+    **
+    **  You should have received a copy of the GNU General Public License
+    **  version 3 along with this program in file "license-gpl-3.0.txt".
+    **  If not, see <http://www.gnu.org/licenses/gpl-3.0.txt>.
+    **
+    **--------------------------------------------------------------------------*@
+
+@if (Headers == null)
+{
+    <p class="center"><em>Loading...</em></p>
+}
+else
+{
+    <div>
+        @if (Headers.Count > 0)
+        {
+            <span>Show Response Content on Expand&nbsp; <SfSwitch @bind-Checked="@ShowContent"></SfSwitch>&nbsp; Expand All&nbsp; <SfSwitch @bind-Checked="@ExpandAll" ValueChange="ExpandAllChange" TChecked="bool"></SfSwitch></span>
+        }
+    </div>
+    @if (Headers.Count > 0)
+    {
+        <SfGrid @ref="@sfGrid2" DataSource="Headers" AllowPaging="false" AllowSelection="true" EnableHover="true" AllowFiltering="true">
+            <GridFilterSettings>
+                <GridFilterColumns>
+                    <GridFilterColumn Field="IsDeleted" MatchCase=true Operator="Operator.Equal" Predicate="and" Value="@false"></GridFilterColumn>
+                    <GridFilterColumn Field = "Version" MatchCase =true Operator = "Operator.Equal" Predicate = "and" Value = "0" ></GridFilterColumn>
+                </GridFilterColumns>
+            </GridFilterSettings>
+            <GridEvents DataBound="DataBoundHandler" RowSelected="DisplayIt" TValue="NoteHeader"></GridEvents>
+            <GridTemplates>
+                <DetailTemplate>
+                    @if (ShowContent)
+                    {
+                        var current2 = (context as NoteHeader);
+                        <NotePanel NoteId="@current2.Id" ShowChild="false" IsRootNote="false" IsMini="true"></NotePanel>
+                    }
+                </DetailTemplate>
+            </GridTemplates>
+            <GridColumns>
+                <GridColumn Field=@nameof(NoteHeader.ResponseOrdinal) HeaderText="Resp. #" TextAlign="TextAlign.Left" Width="25" IsPrimaryKey="true"></GridColumn>
+                <GridColumn Field=@nameof(NoteHeader.NoteSubject) HeaderText="Subject" TextAlign="TextAlign.Left" Width="150"></GridColumn>
+                <GridColumn Field=@nameof(NoteHeader.AuthorName) HeaderText="Writer" TextAlign="TextAlign.Left" Width="80"></GridColumn>
+                <GridColumn Field=@nameof(NoteHeader.CreateDate) HeaderText="Date/Time" TextAlign="TextAlign.Left" Width="60">
+                    <Template Context="inner">
+                        @{
+                            var itemx = (inner as NoteHeader);
+                            <span>@Globals.LocalTimeBlazor(itemx.CreateDate)</span>
+                        }
+                    </Template>
+                </GridColumn>
+                <GridColumn Field=@nameof(NoteHeader.IsDeleted) HeaderText="Del" TextAlign="TextAlign.Left" Width="0" Type="ColumnType.Boolean"></GridColumn>
+                <GridColumn Field=@nameof(NoteHeader.Version) HeaderText="Version" TextAlign="TextAlign.Left" Width="0"></GridColumn>
+            </GridColumns>
+</SfGrid>
+    }
+}

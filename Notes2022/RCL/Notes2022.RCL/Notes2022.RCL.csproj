@@ -1,0 +1,59 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="DAL\**" />
+    <Content Remove="DAL\**" />
+    <EmbeddedResource Remove="DAL\**" />
+    <None Remove="DAL\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="User\About.razor.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="bundleconfig.json" />
+    <Content Remove="User\About.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Protos\Notes2022gRPC.proto" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Blazored.Modal" Version="6.0.1" />
+    <PackageReference Include="Blazored.SessionStorage" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="6.0.0" />
+    <PackageReference Include="Syncfusion.Blazor.Buttons" Version="19.3.0.55" />
+    <PackageReference Include="Syncfusion.Blazor.Calendars" Version="19.3.0.55" />
+    <PackageReference Include="Syncfusion.Blazor.Core" Version="19.3.0.55" />
+    <PackageReference Include="Syncfusion.Blazor.Grid" Version="19.3.0.55" />
+    <PackageReference Include="Syncfusion.Blazor.Inputs" Version="19.3.0.55" />
+    <PackageReference Include="Syncfusion.Blazor.LinearGauge" Version="19.3.0.55" />
+    <PackageReference Include="Syncfusion.Blazor.Navigations" Version="19.3.0.55" />
+    <PackageReference Include="Syncfusion.Blazor.RichTextEditor" Version="19.3.0.55" />
+    <PackageReference Include="Syncfusion.Blazor.Themes" Version="19.3.0.55" />
+    <PackageReference Include="Syncfusion.Licensing" Version="19.3.0.55" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\Notes2022.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Protos\Notes2022gRPC.proto" GrpcServices="Client" Access="Internal" />
+  </ItemGroup>
+
+</Project>

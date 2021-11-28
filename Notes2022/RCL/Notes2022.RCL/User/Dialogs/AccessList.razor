@@ -1,0 +1,156 @@
+﻿@*--------------------------------------------------------------------------
+    **
+    **  Copyright © 2022, Dale Sinder
+    **
+    **  Name: AccessList.razor
+    **
+    **  Description:
+    **      Shows access list
+    **
+    **  This program is free software: you can redistribute it and/or modify
+    **  it under the terms of the GNU General Public License version 3 as
+    **  published by the Free Software Foundation.
+    **
+    **  This program is distributed in the hope that it will be useful,
+    **  but WITHOUT ANY WARRANTY; without even the implied warranty of
+    **  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    **  GNU General Public License version 3 for more details.
+    **
+    **  You should have received a copy of the GNU General Public License
+    **  version 3 along with this program in file "license-gpl-3.0.txt".
+    **  If not, see <http: //www.gnu.org/licenses/gpl-3.0.txt>.
+    **
+    **--------------------------------------------------------------------------*@
+
+@using Notes2022.Shared
+
+@if (myAccess == null)
+{
+    <p class="center"><em>Loading...</em></p>
+}
+else
+{
+    <div class="dialogs modal-body">
+        <h3>Access Editor</h3>
+        @message
+        <div class="col-lg-12 control-section dialoglist">
+            <div class="content-wrapper">
+                <div class="row">
+                    <SfGrid @ref="MyGrid" DataSource="@myList" AllowPaging="true">
+                        <GridPageSettings PageSizes="true"></GridPageSettings>
+                        <GridColumns>
+                            <GridColumn HeaderText="User Name" TextAlign="TextAlign.Left">
+                                <Template>
+                                    @{
+                                        var current = (context as NoteAccess);
+                                        string userName = current.UserID;
+                                        if (userName != Globals.AccessOtherId())
+                                        {
+                                            UserData temp = userList.Find(p => p.UserId == userName);
+                                            if (temp != null)
+                                            {
+                                                userName = temp.DisplayName;
+                                            }
+                                        }
+                                        <div>
+                                            @userName
+                                        </div>
+                                    }
+                                </Template>
+                            </GridColumn>
+                            <GridColumn HeaderText="Read" TextAlign="TextAlign.Center">
+                                <Template>
+                                    @{
+                                        var item = (context as NoteAccess);
+                                        AccessItem read = new AccessItem { isChecked = item.ReadAccess, which = AccessX.ReadAccess, Item = item, canEdit = myAccess.EditAccess };
+                                        <AccessCheckBox Model="@read" />
+                                    }
+                                </Template>
+                            </GridColumn>
+                            <GridColumn HeaderText="Write" TextAlign="TextAlign.Center">
+                                <Template>
+                                    @{
+                                        var item = (context as NoteAccess);
+                                        AccessItem write = new AccessItem { isChecked = item.Write, which = AccessX.Write, Item = item, canEdit = myAccess.EditAccess };
+                                        <AccessCheckBox Model="@write" />
+                                    }
+                                </Template>
+                            </GridColumn>
+                            <GridColumn HeaderText="Respond" TextAlign="TextAlign.Center">
+                                <Template>
+                                    @{
+                                        var item = (context as NoteAccess);
+                                        AccessItem resp = new AccessItem { isChecked = item.Respond, which = AccessX.Respond, Item = item, canEdit = myAccess.EditAccess };
+                                        <AccessCheckBox Model="@resp" />
+                                    }
+                                </Template>
+                            </GridColumn>
+                            <GridColumn HeaderText="Set Tag" TextAlign="TextAlign.Center">
+                                <Template>
+                                    @{
+                                        var item = (context as NoteAccess);
+                                        AccessItem settag = new AccessItem { isChecked = item.SetTag, which = AccessX.SetTag, Item = item, canEdit = myAccess.EditAccess };
+                                        <AccessCheckBox Model="@settag" />
+                                    }
+                                </Template>
+                            </GridColumn>
+                            <GridColumn HeaderText="Delete/Edit" TextAlign="TextAlign.Center">
+                                <Template>
+                                    @{
+                                        var item = (context as NoteAccess);
+                                        AccessItem settag = new AccessItem { isChecked = item.DeleteEdit, which = AccessX.DeleteEdit, Item = item, canEdit = myAccess.EditAccess };
+                                        <AccessCheckBox Model="@settag" />
+                                    }
+                                </Template>
+                            </GridColumn>
+                            <GridColumn HeaderText="View Access" TextAlign="TextAlign.Center">
+                                <Template>
+                                    @{
+                                        var item = (context as NoteAccess);
+                                        AccessItem settag = new AccessItem { isChecked = item.ViewAccess, which = AccessX.ViewAccess, Item = item, canEdit = myAccess.EditAccess };
+                                        <AccessCheckBox Model="@settag" />
+                                    }
+                                </Template>
+                            </GridColumn>
+                            <GridColumn HeaderText="Edit Access" TextAlign="TextAlign.Center">
+                                <Template>
+                                    @{
+                                        var item = (context as NoteAccess);
+                                        AccessItem settag = new AccessItem { isChecked = item.EditAccess, which = AccessX.EditAccess, Item = item, canEdit = myAccess.EditAccess };
+                                        <AccessCheckBox Model="@settag" />
+                                    }
+                                </Template>
+                            </GridColumn>
+                            <GridColumn HeaderText="Delete" TextAlign="TextAlign.Center">
+                                <Template>
+                                    @{
+                                        if (myAccess.EditAccess)
+                                        {
+                                            var item = (context as NoteAccess);
+                                            if (item.UserID == Globals.AccessOtherId())
+                                            {
+                                            }
+                                            else if (item.UserID == myAccess.UserID)
+                                            {
+                                            }
+                                            else
+                                            {
+                                                <AccessDeleteButton noteAccess="@item" OnClick="ClickHandler" />
+                                            }
+                                        }
+                                    }
+                                </Template>
+                            </GridColumn>
+                        </GridColumns>
+                    </SfGrid>
+                </div>
+            </div>
+        </div>
+        @if (myAccess.EditAccess)
+        {
+            <button type="button" @onclick="CreateNew" class="btn btn-primary btn-sm">Create</button>
+        }
+        <button type="button" @onclick="Cancel" class="btn btn-info btn-sm">Close</button>
+
+    </div>
+}

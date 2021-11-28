@@ -1,0 +1,77 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>8e69a48b-6553-48bf-ad59-f33bf6f8c860</UserSecretsId>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;8602;8601</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;8602;8601</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Pages\User\Dialogs\**" />
+    <Compile Remove="Pages\User\Menus\**" />
+    <Compile Remove="Pages\User\Panels\**" />
+    <Compile Remove="wwwroot\images\**" />
+    <Content Remove="Pages\User\Dialogs\**" />
+    <Content Remove="Pages\User\Menus\**" />
+    <Content Remove="Pages\User\Panels\**" />
+    <Content Remove="wwwroot\images\**" />
+    <EmbeddedResource Remove="Pages\User\Dialogs\**" />
+    <EmbeddedResource Remove="Pages\User\Menus\**" />
+    <EmbeddedResource Remove="Pages\User\Panels\**" />
+    <EmbeddedResource Remove="wwwroot\images\**" />
+    <None Remove="Pages\User\Dialogs\**" />
+    <None Remove="Pages\User\Menus\**" />
+    <None Remove="Pages\User\Panels\**" />
+    <None Remove="wwwroot\images\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Flags.cs" />
+    <Compile Remove="Globals.cs" />
+    <Compile Remove="Pages\Admin\NotesFilesAdmin.razor.cs" />
+    <Compile Remove="Pages\User\Index.razor.cs" />
+    <Compile Remove="Pages\User\NotesFiles.razor.cs" />
+    <Compile Remove="Pages\User\Preferences.razor.cs" />
+    <Compile Remove="Pages\User\SubCheckBox.razor.cs" />
+    <Compile Remove="Pages\User\Tracker.razor.cs" />
+    <Compile Remove="Pages\User\TrackerMover.razor.cs" />
+    <Compile Remove="Shared\FileButton.razor.cs" />
+    <Compile Remove="Utils.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Pages\Counter.razor" />
+    <Content Remove="Pages\FetchData.razor" />
+    <Content Remove="Pages\User\SCheckBox.razor" />
+    <Content Remove="Pages\User\SubCheckBox.razor" />
+    <Content Remove="Pages\User\TrackerMover.razor" />
+    <Content Remove="Shared\FileButton.razor" />
+    <Content Remove="Shared\SurveyPrompt.razor" />
+    <Content Remove="wwwroot\css\ExportCSS\NotesExport31.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Blazored.Modal" Version="6.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="6.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+    <PackageReference Include="Syncfusion.Blazor.Buttons" Version="19.3.0.55" />
+    <PackageReference Include="Syncfusion.Blazor.Core" Version="19.3.0.55" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RCL\Notes2022.RCL\Notes2022.RCL.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,90 @@
+﻿@*--------------------------------------------------------------------------
+    **
+    **  Copyright © 2022, Dale Sinder
+    **
+    **  Name: Preferences.razor
+    **
+    **  Description:
+    **      Set user preferences
+    **
+    **  This program is free software: you can redistribute it and/or modify
+    **  it under the terms of the GNU General Public License version 3 as
+    **  published by the Free Software Foundation.
+    **
+    **  This program is distributed in the hope that it will be useful,
+    **  but WITHOUT ANY WARRANTY; without even the implied warranty of
+    **  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    **  GNU General Public License version 3 for more details.
+    **
+    **  You should have received a copy of the GNU General Public License
+    **  version 3 along with this program in file "license-gpl-3.0.txt".
+    **  If not, see <http://www.gnu.org/licenses/gpl-3.0.txt>.
+    **
+    **--------------------------------------------------------------------------*@
+
+@using Notes2022.Shared
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Text
+@using Newtonsoft.Json
+@inject HttpClient Http
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager Navigation
+
+@if (string.IsNullOrEmpty(currentText))
+{
+    <p class="center"><em>Loading...</em></p>
+}
+else
+{
+    <AuthorizeView>
+        <Authorized>
+            <div>
+                <h2>Preferences</h2>
+ @*               <h2>Set Time Zone</h2>
+        <h5>
+            @currentText<br/>Your Device: @TimeZone
+        </h5>
+        <p>Select your Time Zone (So Time Zone Name is displayed correctly):</p>
+        <select class="form-control medium-input" @bind="@myZid">
+            @foreach (LocalModel item in MyList)
+            {
+                <option value="@item.Id">@item.Name</option>
+            }
+        </select>*@
+                <br />
+                <p>Default Page Size for Pageable Lists:</p>
+                <select class="form-control short-input" @bind="@pageSize">
+                    @foreach (LocalModel2 item in MySizes)
+                    {
+                        <option value="@item.Psize">@item.Name</option>
+                    }
+                </select>
+                <br />
+                @*<EjsSwitch @bind-Checked="@UserData.Pref1"></EjsSwitch> Use scrolling index rather than paged
+        <br />*@
+                @*<EjsSwitch @bind-Checked="@UserData.Pref2"></EjsSwitch> Use Non-Dialog note editor - Lets you browse uploaded images
+        <br />*@
+@*                <SfSwitch @bind-Checked="@UserData.Pref6"></SfSwitch> Use Syncfusion note editor - Lets you paste from Word
+                <br />
+*@                
+                <SfSwitch @bind-Checked="@UserData.Pref7"></SfSwitch> Show Content on index by default when expanded
+                <br />
+                <SfSwitch @bind-Checked="@UserData.Pref3"></SfSwitch> Show Responses by default
+                <br />
+@*                <SfSwitch @bind-Checked="@UserData.Pref5"></SfSwitch> Show Expandable Responses
+                <br />
+                <SfSwitch @bind-Checked="@UserData.Pref4"></SfSwitch> Show Multiple Expandable Responses
+                <br />
+*@
+                <button type="button" @onclick="OnSubmit" class="btn btn-info btn-sm">Submit</button>&nbsp;&nbsp;
+                <button type="button" @onclick="Cancel" class="btn btn-info btn-sm">Close</button>
+
+            </div>
+        </Authorized>
+        <NotAuthorized>
+            Access Denied!
+        </NotAuthorized>
+    </AuthorizeView>
+}
+
+

@@ -1,0 +1,59 @@
+﻿@*--------------------------------------------------------------------------
+    **
+    **  Copyright © 2022, Dale Sinder
+    **
+    **  Name: DeleteNoteFile.razor
+    **
+    **  Description:
+    **      Note File Deletion Dialog
+    **
+    **  This program is free software: you can redistribute it and/or modify
+    **  it under the terms of the GNU General Public License version 3 as
+    **  published by the Free Software Foundation.
+    **
+    **  This program is distributed in the hope that it will be useful,
+    **  but WITHOUT ANY WARRANTY; without even the implied warranty of
+    **  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    **  GNU General Public License version 3 for more details.
+    **
+    **  You should have received a copy of the GNU General Public License
+    **  version 3 along with this program in file "license-gpl-3.0.txt".
+    **  If not, see <http://www.gnu.org/licenses/gpl-3.0.txt>.
+    **
+    **--------------------------------------------------------------------------*@
+
+
+@inject HttpClient Http
+@inject IModalService Modal
+
+
+        <div class="dialogs">
+            <h3>Delete Note File Id: @FileId</h3>
+            <h4>@FileName</h4>
+            <h4>@FileTitle</h4>
+            <EditForm id="createform" Model="@dummyFile" OnValidSubmit="HandleValidSubmit">
+                <button type="submit">Confirm</button> <button type="button" @onclick="Cancel">Cancel</button>
+            </EditForm>
+        </div>
+
+@code {
+
+    public CreateFileModel dummyFile = new CreateFileModel();
+
+    [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
+    [Parameter] public int FileId { get; set; }
+    [Parameter] public string FileName { get; set; }
+    [Parameter] public string FileTitle { get; set; }
+
+    private async Task HandleValidSubmit()
+    {
+        await DAL.DeleteNoteFile(Http, FileId);
+
+        ModalInstance.CloseAsync(ModalResult.Ok($"Delete was submitted successfully."));
+    }
+
+    private void Cancel()
+    {
+        ModalInstance.CancelAsync();
+    }
+}

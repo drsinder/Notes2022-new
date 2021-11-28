@@ -1,0 +1,61 @@
+﻿@*--------------------------------------------------------------------------
+    **
+    ** Copyright © 2022, Dale Sinder
+    **
+    **  Description:
+    **      Menu bar for Main List of notes
+    **
+    **  This program is free software: you can redistribute it and/or modify
+    **  it under the terms of the GNU General Public License version 3 as
+    **  published by the Free Software Foundation.
+    **
+    **  This program is distributed in the hope that it will be useful,
+    **  but WITHOUT ANY WARRANTY; without even the implied warranty of
+    **  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    **  GNU General Public License version 3 for more details.
+    **
+    **  You should have received a copy of the GNU General Public License
+    **  version 3 along with this program in file "license-gpl-3.0.txt".
+    **  If not, see <http://www.gnu.org/licenses/gpl-3.0.txt>.
+    **
+    **--------------------------------------------------------------------------*@
+
+@using Syncfusion.Blazor.Popups
+
+<div class="top-row navbar-full-dark" >
+    <SfMenu Items="@menuItems" @ref="@topMenu" HamburgerMode="@HamburgerMode" CssClass="e-std-menu"  ShowItemOnClick="true">
+        <MenuEvents TValue="MenuItem" ItemSelected="@OnSelect" >
+        </MenuEvents>
+    </SfMenu>
+    @if(IsPrinting)
+    {
+        <div class="control-section keep-center">
+            <h4>Progress: @sliderValueText</h4>
+            <SfLinearGauge Orientation="Syncfusion.Blazor.LinearGauge.Orientation.Horizontal" Height="50px">
+                <LinearGaugeContainer Width="30"
+                                        Offset="0"
+                                        BackgroundColor="#777">
+                </LinearGaugeContainer>
+                <LinearGaugeAxes>
+                    <LinearGaugeAxis Maximum="@baseNotes">
+                        <LinearGaugeMajorTicks Color="white" Height="5">
+                        </LinearGaugeMajorTicks>
+                        <LinearGaugeMinorTicks Color="white" Height="2">
+                        </LinearGaugeMinorTicks>
+                        <LinearGaugeLine Width="0"></LinearGaugeLine>
+                        <LinearGaugeAxisLabelStyle Offset="-55">
+                        </LinearGaugeAxisLabelStyle>
+                        <LinearGaugePointers>
+                            <LinearGaugePointer PointerValue="@currNote"
+                                                Height="30"
+                                                Type="Point.Bar"
+                                                Color="#3C0">
+                            </LinearGaugePointer>
+                        </LinearGaugePointers>
+                    </LinearGaugeAxis>
+                </LinearGaugeAxes>
+            </SfLinearGauge>
+        </div>
+    }
+
+</div>

@@ -1,0 +1,48 @@
+﻿@*--------------------------------------------------------------------------
+    **
+    **  Copyright © 2022, Dale Sinder
+    **
+    **  Name: AddAccessDlg.razor
+    **
+    **  Description:
+    **      Adds a user to the access list
+    **
+    **  This program is free software: you can redistribute it and/or modify
+    **  it under the terms of the GNU General Public License version 3 as
+    **  published by the Free Software Foundation.
+    **
+    **  This program is distributed in the hope that it will be useful,
+    **  but WITHOUT ANY WARRANTY; without even the implied warranty of
+    **  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    **  GNU General Public License version 3 for more details.
+    **
+    **  You should have received a copy of the GNU General Public License
+    **  version 3 along with this program in file "license-gpl-3.0.txt".
+    **  If not, see <http: //www.gnu.org/licenses/gpl-3.0.txt>.
+    **
+    **--------------------------------------------------------------------------*@
+
+@if (NoteFileId == 0)
+{
+    <p class="center"><em>Loading...</em></p>
+}
+else
+{
+    <div class="dialogs modal-body">
+        <h3>Add Access Element for User</h3>
+
+        <h5>Select the User</h5>
+
+        <select @bind="selectedUserId">
+            <option value="none">Choose from below</option>
+            @foreach (UserData item in userList)
+            {
+                <option value="@item.UserId">@item.DisplayName</option>
+            }
+        </select>
+        <br /><br />
+        <button type="button" @onclick="Create" class="btn btn-success btn-sm">Create</button>
+
+        <button type="button" @onclick="Cancel" class="btn btn-info btn-sm">Cancel</button>
+    </div>
+}

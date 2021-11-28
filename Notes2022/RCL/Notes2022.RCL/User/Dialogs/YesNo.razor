@@ -1,0 +1,26 @@
+﻿<div class="dialogs">
+    <h3>Please confirm</h3>
+    <p>
+        @((MarkupString)MessageInput)
+    </p>
+    <button type="button" @onclick="Cancel" class="btn btn-info btn-sm">No</button>
+    <button type="button" @onclick="Ok" class="btn btn-info btn-sm">Yes</button>&nbsp;
+</div>
+
+
+@code {
+    [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
+    [Parameter] public string MessageInput { get; set; }
+
+    private void Cancel()
+    {
+        ModalInstance.CancelAsync();
+
+    }
+        
+    private void Ok()
+    {
+        ModalInstance.CloseAsync(ModalResult.Ok("Yes"));
+    }
+
+}

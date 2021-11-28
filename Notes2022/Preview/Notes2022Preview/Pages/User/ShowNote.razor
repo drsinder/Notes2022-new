@@ -1,0 +1,8 @@
+﻿@page "/notedisplay/{NoteID:long}"
+
+@*<NotePanel NoteId="@NoteId" ShowChild="false" IsRootNote="true"></NotePanel>
+*@
+@if (FileId > 0)
+{
+    <Notes2022.RCL.User.NoteIndex NotesfileId="@FileId" CurrentNoteId="@NoteId" ></Notes2022.RCL.User.NoteIndex>
+}

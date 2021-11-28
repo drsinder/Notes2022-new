@@ -1,0 +1,59 @@
+﻿@*--------------------------------------------------------------------------
+    **
+    **  Copyright © 2022, Dale Sinder
+    **
+    **  Name: HelpDialog.razor
+    **
+    **  Description:
+    **      Help for the notes file index Main (mode 0)
+    **
+    **  This program is free software: you can redistribute it and/or modify
+    **  it under the terms of the GNU General Public License version 3 as
+    **  published by the Free Software Foundation.
+    **
+    **  This program is distributed in the hope that it will be useful,
+    **  but WITHOUT ANY WARRANTY; without even the implied warranty of
+    **  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    **  GNU General Public License version 3 for more details.
+    **
+    **  You should have received a copy of the GNU General Public License
+    **  version 3 along with this program in file "license-gpl-3.0.txt".
+    **  If not, see <http://www.gnu.org/licenses/gpl-3.0.txt>.
+    **
+    **--------------------------------------------------------------------------*@
+
+<div class="dialogs modal-body">
+    <h3>Note List Help</h3>
+    <p>
+        <b>L</b> - list of NoteFiles.<br />
+        <b>N</b> - write a new base note.<br />
+        <b>S</b> - search options.<br />
+        <b>H</b> - Show/Download file as Html.<br />
+        <b>h</b> - Show/Download file as alternate Html.<br />
+        <b>m</b> - mail NotesFile as Html.<br />
+        <b>X</b> - Export the file.<br />
+        <b>M</b> - Mark My notes for Output. <br />
+        <b>O</b> - Output Marked Notes.<br />
+        <b>A</b> - edit the access controls.<br />
+        <b>a</b> - To select an archive.<br />
+        <b>P</b> - To print entire file.<br />
+        <b>R</b> - To Refresh/Reload list of notes.<br />
+        <b>U</b> - See the Uploaded files.<br />
+        <b>J</b> - Json Export - Can be used to import later.<br />
+        <br />
+        In the brown input box:<br />
+        Type a number and press <b>RETURN/ENTER</b> to display that note number.<br />
+        You may go to a response by typing the <b>noteNumber.responseNumbe</b>r and pressing <b>RETURN/ENTER</b>.
+    </p>
+    <button type="button" @onclick="Cancel" class="btn btn-info btn-sm">Close</button>
+</div>
+
+@code {
+    [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
+
+    private void Cancel()
+    {
+        ModalInstance.CancelAsync();
+    }
+}
+

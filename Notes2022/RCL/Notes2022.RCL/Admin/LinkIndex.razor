@@ -1,0 +1,67 @@
+﻿
+<h3>Linked File Index</h3>
+@if (Model == null)
+{
+    <p class="center"><em>Loading...</em></p>
+}
+else
+{
+    <AuthorizeView>
+        <Authorized>
+            <button type="button" @onclick="Create">Create</button>
+            <div class="row">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Home File Id
+                            </th>
+                            <th>
+                                Home File Name
+                            </th>
+                            <th>
+                                Remote File Name
+                            </th>
+                            <th>
+                                Remote Base Uri
+                            </th>
+                            <th>
+                                Accept From
+                            </th>
+                            <th>
+                                Send To
+                            </th>
+                            <th>
+                                Shared Secret
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.HomeFileId</td>
+                                <td>@item.HomeFileName</td>
+                                <td>@item.RemoteFileName</td>
+                                <td>@item.RemoteBaseUri</td>
+                                <td>@item.AcceptFrom</td>
+                                <td>@item.SendTo</td>
+                                <td>@item.Secret</td>
+                                <td>
+@*                                    <button @onclick="@(() => EditLink(item.Id))">Edit</button>
+*@                                    
+                                    <button @onclick="@(() => DeleteLink(item.Id))">Delete</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </Authorized>
+        <NotAuthorized>
+            You do not have access!
+        </NotAuthorized>
+    </AuthorizeView>
+}
+

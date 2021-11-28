@@ -1,0 +1,12 @@
+﻿@page "/indexreload"
+
+@inject NavigationManager Navigation
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        Globals.RolesValid = false;
+        Navigation.NavigateTo("", true);
+    }
+
+}

@@ -1,0 +1,43 @@
+﻿
+
+@if (Model == null)
+{
+    <p class="center"><em>Loading...</em></p>
+}
+else
+{
+    <AuthorizeView>
+        <Authorized>
+            <div class="dialogs modal-body">
+                <h3>Create Linked File</h3>
+                Select File to link:
+                <br />
+                <select id="select1" @bind="myFile">
+                    <option value="0" selected="selected">-- Select from list --</option>
+                    @foreach (NoteFile item in Files)
+                    {
+                        <option value="@item.Id">@item.NoteFileName</option>
+                    }
+                </select>
+                <br />
+                Name of remote file:<br />
+                <input type="text" @bind="@remoteFile" />
+                <br />Uri of remote App:<br />
+                <input type="text" @bind="@appUri" class="long-input" />
+                <br />Shared Secret:<br />
+                <input type="text" @bind="@secret" class="long-input" />
+                <br />
+                <SfCheckBox @bind-Checked="@accept" Label="Accept From"></SfCheckBox>
+                <br />
+                <SfCheckBox @bind-Checked="@send" Label="Send to"></SfCheckBox>
+                <br /><br />
+                <button type="button" @onclick="Submit">Submit</button>
+                <button type="button" @onclick="Cancel">Cancel</button>
+            </div>
+        </Authorized>
+        <NotAuthorized>
+            You do not have access!
+        </NotAuthorized>
+    </AuthorizeView>
+}
+

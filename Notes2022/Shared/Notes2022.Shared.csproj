@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Version>1.0.2</Version>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="NotesModels\INotes22022Service.cs" />
+    <Compile Remove="NotesModels\LongWrapper.cs" />
+    <Compile Remove="NotesModels\Message.cs" />
+    <Compile Remove="WeatherForecast.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Protos\Notes2022gRPC.proto" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+  <ItemGroup>
+    <Protobuf Include="Protos\Notes2022gRPC.proto" GrpcServices="Client" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,43 @@
+﻿@*--------------------------------------------------------------------------
+    **
+    **  Copyright © 2022, Dale Sinder
+    **
+    **  Name: PrintDlg.razor
+    **
+    **  Description:
+    **      Shows prepared print output and lets user print it
+    **
+    **  This program is free software: you can redistribute it and/or modify
+    **  it under the terms of the GNU General Public License version 3 as
+    **  published by the Free Software Foundation.
+    **
+    **  This program is distributed in the hope that it will be useful,
+    **  but WITHOUT ANY WARRANTY; without even the implied warranty of
+    **  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    **  GNU General Public License version 3 for more details.
+    **
+    **  You should have received a copy of the GNU General Public License
+    **  version 3 along with this program in file "license-gpl-3.0.txt".
+    **  If not, see <http://www.gnu.org/licenses/gpl-3.0.txt>.
+    **
+    **--------------------------------------------------------------------------*@
+
+@using System.Timers
+@using Syncfusion.Blazor.RichTextEditor
+@inject IModalService Modal
+
+    <div class="dialogs">
+        <h2>Click the print button below.</h2>
+        <button @onclick="onPrint" class="btn btn-success btn-sm">Print</button>
+        <div class="control-section">
+            <div class="control-wrapper">
+                <div class="control-section long-input">
+                    <SfRichTextEditor @ref="@RteObj" ShowCharCount="false" EditorMode="EditorMode.HTML" Readonly="@readonlyPrint" Height="300" MaxLength="2000000">
+                    </SfRichTextEditor>
+                </div>
+            </div>
+        </div>
+        <button @onclick="ClosePrint" class="btn btn-info btn-sm">Close Printer</button>
+    </div>
+
+

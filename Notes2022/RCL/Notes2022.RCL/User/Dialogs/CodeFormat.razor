@@ -1,0 +1,27 @@
+﻿@using Syncfusion.Blazor.DropDowns
+
+<div class="dialogs modal-body long-input">
+
+    <h3>Insert Code To Be added by "IC" button on toolbar</h3>
+
+    <div>
+        Format as:  <SfDropDownList TValue="string" Placeholder="Select code type" 
+                            TItem="CFormat" @bind-Value="@DropVal" DataSource="@CFormats">
+                        <DropDownListFieldSettings Value="Name"></DropDownListFieldSettings>
+                    </SfDropDownList>
+    </div>
+    <hr />
+    <div>
+        <SfTextBox @ref="@TextObj" Multiline=true Value="@message" Enabled="true" CssClass="mycode">
+        </SfTextBox>
+    </div>
+    <button type="button" @onclick="Ok" class="btn btn-success btn-sm">Ok</button>
+    <button type="button" @onclick="Cancel" class="btn btn-info btn-sm">Cancel</button>
+</div>
+
+<style>
+    .e-input-group.mycode {
+        height: 350px;
+    }
+</style>
+

@@ -1,0 +1,58 @@
+﻿
+@*--------------------------------------------------------------------------
+    **
+    **  Copyright © 2022, Dale Sinder
+    **
+    **  Name: NotesFiles.razor
+    **
+    **  Description:
+    **      Displays a list of note files
+    **
+    **  This program is free software: you can redistribute it and/or modify
+    **  it under the terms of the GNU General Public License version 3 as
+    **  published by the Free Software Foundation.
+    **
+    **  This program is distributed in the hope that it will be useful,
+    **  but WITHOUT ANY WARRANTY; without even the implied warranty of
+    **  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    **  GNU General Public License version 3 for more details.
+    **
+    **  You should have received a copy of the GNU General Public License
+    **  version 3 along with this program in file "license-gpl-3.0.txt".
+    **  If not, see <http://www.gnu.org/licenses/gpl-3.0.txt>.
+    **
+    **--------------------------------------------------------------------------*@
+
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage
+
+<h3>NotesFiles</h3>
+
+@if( UserData == null)
+{
+    <p class=""><em>Loading...</em></p>
+}
+else
+{
+    <SfGrid DataSource="@Files" EnableAltRow="true" AllowPaging="true" AllowSelection="true" EnableHover="true" AllowSorting="true" Toolbar="@(new List<object>() { "Print" })">
+        <GridPageSettings PageSize="12" PageSizes="true"></GridPageSettings>
+        <GridEvents RowSelected="DisplayIt" TValue="NoteFile"></GridEvents>
+        <GridColumns>
+            <GridColumn Field=@nameof(NoteFile.NoteFileTitle) HeaderText="NoteFile Title" TextAlign="TextAlign.Left" Width="150"></GridColumn>
+            <GridColumn Field=@nameof(NoteFile.NoteFileName) HeaderText="NoteFile Name" TextAlign="TextAlign.Left" Width="80" IsPrimaryKey="true"></GridColumn>
+            <GridColumn HeaderText="Date/Time" TextAlign="TextAlign.Left" Width="60">
+                <Template Context="inner">
+                @{
+                    var itemx = (inner as NoteFile);
+                    DateTime curTimex = Globals.LocalTimeBlazor(itemx.LastEdited);
+                    string tellx = curTimex.ToShortDateString() + " " + curTimex.ToShortTimeString();
+                    <span>@tellx</span>
+                 }
+                </Template> 
+            </GridColumn>
+        </GridColumns>
+    </SfGrid>
+}
+
+
