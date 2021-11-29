@@ -118,7 +118,7 @@ namespace Notes2022.Server.Controllers
 
             // set read access for Other in Announce
             int padid = nf4.Id;
-            NoteAccess access = await AccessManager.GetOneAccess(_db, Globals.AccessOtherId(), padid, 0);
+            NoteAccess access = await AccessManager.GetOneAccess(_db, Globals.AccessOtherId, padid, 0);
             access.ReadAccess = true;
 
             _db.Entry(access).State = EntityState.Modified;
@@ -132,7 +132,7 @@ namespace Notes2022.Server.Controllers
 
             // set read, write, respond access to Pbnotes
             int padid = nf4.Id;
-            NoteAccess access = await AccessManager.GetOneAccess(_db, Globals.AccessOtherId(), padid, 0);
+            NoteAccess access = await AccessManager.GetOneAccess(_db, Globals.AccessOtherId, padid, 0);
             access.ReadAccess = true;
             access.Respond = true;
             access.Write = true;
@@ -148,7 +148,7 @@ namespace Notes2022.Server.Controllers
 
             // Set read, write, respond access to Noteshelp
             int padid = nf4.Id;
-            NoteAccess access = await AccessManager.GetOneAccess(_db, Globals.AccessOtherId(), padid, 0);
+            NoteAccess access = await AccessManager.GetOneAccess(_db, Globals.AccessOtherId, padid, 0);
             access.ReadAccess = true;
             access.Respond = true;
             access.Write = true;
@@ -164,7 +164,7 @@ namespace Notes2022.Server.Controllers
 
             // Set read, write, respond access to pad
             int padid = nf4.Id;
-            NoteAccess access = await AccessManager.GetOneAccess(_db, Globals.AccessOtherId(), padid, 0);
+            NoteAccess access = await AccessManager.GetOneAccess(_db, Globals.AccessOtherId, padid, 0);
             access.ReadAccess = true;
             access.Respond = true;
             access.Write = true;

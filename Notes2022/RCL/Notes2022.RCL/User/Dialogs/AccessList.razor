@@ -44,7 +44,7 @@ else
                                     @{
                                         var current = (context as NoteAccess);
                                         string userName = current.UserID;
-                                        if (userName != Globals.AccessOtherId())
+                                        if (userName != Globals.AccessOtherId)
                                         {
                                             UserData temp = userList.Find(p => p.UserId == userName);
                                             if (temp != null)
@@ -127,7 +127,7 @@ else
                                         if (myAccess.EditAccess)
                                         {
                                             var item = (context as NoteAccess);
-                                            if (item.UserID == Globals.AccessOtherId())
+                                            if (item.UserID == Globals.AccessOtherId)
                                             {
                                             }
                                             else if (item.UserID == myAccess.UserID)

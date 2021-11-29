@@ -239,7 +239,7 @@ namespace Notes2022.Server
 
                                 // author
                                 makeHeader.AuthorName = line.Substring(25).Trim(spaceTrim);
-                                makeHeader.AuthorID = Globals.ImportedAuthorId();   //"imported";
+                                makeHeader.AuthorID = Globals.ImportedAuthorId;   //"imported";
                                 line = await file.ReadLineAsync();  // skip line
                                 line = await CheckFf(line, file);
                             }
@@ -323,12 +323,12 @@ namespace Notes2022.Server
                                 if (part.StartsWith(" Author: "))
                                 {
                                     makeHeader.AuthorName = part.Substring(8, part.Length - 8).Trim();
-                                    makeHeader.AuthorID = Globals.ImportedAuthorId();
+                                    makeHeader.AuthorID = Globals.ImportedAuthorId;
                                 }
                                 else
                                 {
                                     makeHeader.AuthorName = "** Author Parse Error **";
-                                    makeHeader.AuthorID = Globals.ImportedAuthorId();
+                                    makeHeader.AuthorID = Globals.ImportedAuthorId;
                                 }
                                 part = parts[parts.Length - 2].Trim();
                                 makeHeader.LastEdited = DateTime.Parse(part);
@@ -472,7 +472,7 @@ namespace Notes2022.Server
                             }
 
                             makeHeader.AuthorName = name + "/" + group;
-                            makeHeader.AuthorID = Globals.ImportedAuthorId();   //"imported";
+                            makeHeader.AuthorID = Globals.ImportedAuthorId;   //"imported";
 
                             await file.ReadLineAsync(); // skip lines to get to content
                             line = await file.ReadLineAsync(); // skip lines to get to content

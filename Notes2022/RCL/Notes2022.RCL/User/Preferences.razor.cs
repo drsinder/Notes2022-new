@@ -19,7 +19,7 @@ namespace Notes2022.RCL.User
 
         private string pageSize { get; set; }
 
-        private string TimeZone { get; set; }
+        //private string TimeZone { get; set; }
 
         protected override async Task OnInitializedAsync()
         {

@@ -83,7 +83,7 @@ namespace Notes2022.Shared
         //public NoteFile? NoteFile { get; set; }
 
         // Makes a clone of the object.  Had to do this to avoid side effects.
-        public Search Clone(Search s)
+        public static Search Clone(Search s)
         {
             Search cloned = new Search
             {

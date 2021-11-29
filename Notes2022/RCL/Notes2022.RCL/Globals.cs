@@ -48,7 +48,7 @@ namespace Notes2022.RCL
 
         //public static string AccessOther() { return "Other"; }
 
-        public static string AccessOtherId() { return "Other"; }
+        public static string AccessOtherId { get; } = "Other";
 
 
         public static DateTime LocalTimeBlazor(DateTime dt)

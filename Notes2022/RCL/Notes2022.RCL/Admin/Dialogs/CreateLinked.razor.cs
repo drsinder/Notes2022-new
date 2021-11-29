@@ -77,14 +77,16 @@ namespace Notes2022.RCL.Admin.Dialogs
                 return;
             }
 
-            LinkedFile linker = new LinkedFile();
-            linker.HomeFileId = myFile;
-            linker.HomeFileName = Files.Find(p => p.Id == myFile).NoteFileName;
-            linker.RemoteBaseUri = appUri;
-            linker.RemoteFileName = remoteFile;
-            linker.Secret = secret;
-            linker.SendTo = send;
-            linker.AcceptFrom = accept;
+            LinkedFile linker = new LinkedFile
+            {
+                HomeFileId = myFile,
+                HomeFileName = Files.Find(p => p.Id == myFile).NoteFileName,
+                RemoteBaseUri = appUri,
+                RemoteFileName = remoteFile,
+                Secret = secret,
+                SendTo = send,
+                AcceptFrom = accept
+            };
 
             await DAL.CreateLinked(Http, linker);
 

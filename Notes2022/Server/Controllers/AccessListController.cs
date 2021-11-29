@@ -126,7 +126,7 @@ namespace Notes2022.Server.Controllers
             if (work is not null)
                 return;     // already exists
 
-            if (item.UserID == Globals.AccessOtherId())
+            if (item.UserID == Globals.AccessOtherId)
                 return;     // can not create "Other"
 
             NoteFile nf = _db.NoteFile.Where(p => p.Id == item.NoteFileId).FirstOrDefault();
@@ -158,7 +158,7 @@ namespace Notes2022.Server.Controllers
             int fid = int.Parse(parts[0]);
             int aid = int.Parse(parts[1]);
 
-            if (uid == Globals.AccessOtherId())
+            if (uid == Globals.AccessOtherId)
                 return;     // can not delete "Other"
 
             // also can not delete self

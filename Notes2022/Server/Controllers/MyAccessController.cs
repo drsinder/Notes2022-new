@@ -68,7 +68,7 @@ namespace Notes2022.Server.Controllers
 
             if (mine is null)   // none?  Get Other token! Generic access token for file
             {
-                mine = await _db.NoteAccess.Where(p => p.NoteFileId == Id && p.UserID == Globals.AccessOtherId() && p.ArchiveId == 0).OrderBy(p => p.ArchiveId).FirstOrDefaultAsync();
+                mine = await _db.NoteAccess.Where(p => p.NoteFileId == Id && p.UserID == Globals.AccessOtherId && p.ArchiveId == 0).OrderBy(p => p.ArchiveId).FirstOrDefaultAsync();
             }
 
             return mine;

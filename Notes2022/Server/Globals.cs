@@ -51,11 +51,11 @@ namespace Notes2022.Server
 
         public static string EmailName { get; set; }
 
-        public static string AccessOther() { return "Other"; }
+        //public static string AccessOther() { return "Other"; }
 
-        public static string AccessOtherId() { return "Other"; }
+        public static string AccessOtherId { get; } = "Other";
 
-        public static string ImportedAuthorId() { return "*imported*"; }
+        public static string ImportedAuthorId { get; } = "*imported*";
 
         public static string ProductionUrl { get; set; }
 

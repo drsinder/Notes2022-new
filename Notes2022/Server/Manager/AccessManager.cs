@@ -83,7 +83,7 @@ namespace Notes2022.Server
         {
             if (true)
             {
-                bool flag1 = await Create(db, Globals.AccessOtherId(), fileId, false, false, false, false, false, false, false);
+                bool flag1 = await Create(db, Globals.AccessOtherId, fileId, false, false, false, false, false, false, false);
                 if (!flag1)
                     return false;
             }
@@ -140,7 +140,7 @@ namespace Notes2022.Server
 
             // If specific user not in list use "Other"
             na = await db.NoteAccess
-                .Where(p => p.UserID == Globals.AccessOtherId() && p.NoteFileId == fileId && p.ArchiveId == arcId).FirstOrDefaultAsync();
+                .Where(p => p.UserID == Globals.AccessOtherId && p.NoteFileId == fileId && p.ArchiveId == arcId).FirstOrDefaultAsync();
 
             if (userId == Globals.GuestId)
             {
