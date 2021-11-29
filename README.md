@@ -29,13 +29,13 @@ appropriate use of the Web platform rather than a dedicated PLATO terminal or a 
 The author of Notes 2022 managed and contributed to the Notes 2 rewrite on NovaNET.
 
 A prior effort, 3.0, was written using Microsoft ASP.NET MVC 5. 
-Version 2017 was derived from 3.0 but uses a new foundation, ASP..NET CORE 6, which permits greater flexibility. 
+Version 2017 was derived from 3.0 but uses a new foundation, ASP.NET CORE 3, which permits greater flexibility. 
 This version is built on dotNET Core 6. Notes 2022 also adds the ability to archive notes files (forums).  
 Notes 2022 also goes beyond the capabilities of NovaNET notes to utilize the scrolling browser environment to advantage. 
 For example, responses to notes have references related to what the author of the response was viewing when they made the response.  
 These references can be displayed while viewing a note (response) and when composing a new response.
 
-Client/Server (Hosted) app. Webasm (HTML/C#/Blazor).
+Client/Server (Hosted) app. WASM (HTML/C#/Blazor).
 
 This is a Visual Studio 2022 project.
 
