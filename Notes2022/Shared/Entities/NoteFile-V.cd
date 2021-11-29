@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="Notes2022.Shared.NoteFile">
+    <Position X="3.5" Y="1.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AgACAgAIAAAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\NoteFile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Notes2022.Shared.NoteHeader">
+    <Position X="5.75" Y="1.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>IAACAgAQAAgYAAgACABgAAQwAAAAQEAAAGABAQAAABA=</HashCode>
+      <FileName>Entities\NoteHeader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Notes2022.Shared.NoteContent">
+    <Position X="5.75" Y="7.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAEAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>Entities\NoteContent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Notes2022.Shared.NoteAccess">
+    <Position X="3.5" Y="3.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAQAAgAAAAAAAgAAAIAAgAIAAAAAAFAAAA=</HashCode>
+      <FileName>Entities\NoteAccess.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Notes2022.Shared.Tags">
+    <Position X="3.25" Y="6.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAwAAgEAAAAAAQAAAEAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Tags.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Notes2022.Shared.UserData">
+    <Position X="1" Y="1.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>gAAAEAAAQCAAAABAAAAABAghEAAAAAAACAACAQAAAAA=</HashCode>
+      <FileName>Entities\UserData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Notes2022.Shared.Subscription">
+    <Position X="1" Y="7.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAQAAAAAgAAAAAAAAAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>Entities\Subscription.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Notes2022.Shared.Sequencer">
+    <Position X="1" Y="9.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAgAABAAAAgAIAIAAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Sequencer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Notes2022.Shared.Search">
+    <Position X="3.25" Y="9.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAQAAgAAAAACAggACAAAAgAAAAACAAAARA=</HashCode>
+      <FileName>Entities\Search.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Notes2022.Shared.Mark">
+    <Position X="5.75" Y="11.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAQAAgAAAAgAAggAAEAAAAAAAASAAAAAAA=</HashCode>
+      <FileName>Entities\Mark.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="Notes2022.Shared.SearchOption">
+    <Position X="5.75" Y="9.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAQACAAAgAgAEgAgAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Search.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
