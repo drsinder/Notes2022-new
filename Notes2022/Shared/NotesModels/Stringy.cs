@@ -25,6 +25,9 @@
 
 namespace Notes2022.Shared
 {
+    /// <summary>
+    /// Encapsulates a string
+    /// </summary>
     public class Stringy
     {
         public string value { get; set; }

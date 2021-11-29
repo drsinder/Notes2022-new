@@ -26,6 +26,9 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Notes2022.Shared
 {
+    /// <summary>
+    /// A Role and a membership flag
+    /// </summary>
     public class CheckedUser
     {
         public IdentityRole theRole { get; set; }
@@ -33,10 +36,24 @@ namespace Notes2022.Shared
         public bool isMember { get; set; }
     }
 
+    /// <summary>
+    /// Model for editing a user role membership
+    /// </summary>
     public class EditUserViewModel
     {
+        /// <summary>
+        /// User data object - who are we - what's our name
+        /// </summary>
         public UserData UserData { get; set; }
+
+        /// <summary>
+        /// List of Roles/memberships
+        /// </summary>
         public List<CheckedUser> RolesList { get; set; }
+
+        /// <summary>
+        /// Extra information hanging around -  points to hangfire dashboard
+        /// </summary>
         public string HangfireLoc { get; set; }
     }
 

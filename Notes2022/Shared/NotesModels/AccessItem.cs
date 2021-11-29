@@ -35,11 +35,30 @@ namespace Notes2022.Shared
         ViewAccess,
         EditAccess
     }
+
+    /// <summary>
+    /// Used for editing an access token segment (one flag)
+    /// </summary>
     public class AccessItem
     {
+        /// <summary>
+        /// The whole token
+        /// </summary>
         public NoteAccess Item { get; set; }
+
+        /// <summary>
+        /// Indicates which segment we are dealing with
+        /// </summary>
         public AccessX which { get; set; }
+
+        /// <summary>
+        /// Is it currently checked?
+        /// </summary>
         public bool isChecked { get; set; }
+
+        /// <summary>
+        /// Can current user change it?
+        /// </summary>
         public bool canEdit { get; set; }
     }
 

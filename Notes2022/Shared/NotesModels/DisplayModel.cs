@@ -24,14 +24,44 @@
 
 namespace Notes2022.Shared
 {
+    /// <summary>
+    /// Contains all info needed to display a note
+    /// </summary>
     public class DisplayModel
     {
+        /// <summary>
+        /// The notefile
+        /// </summary>
         public NoteFile noteFile { get; set; }
+
+        /// <summary>
+        /// Header for the note - Subject, date...
+        /// </summary>
         public NoteHeader header { get; set; }
+
+        /// <summary>
+        /// The content/body of the note
+        /// </summary>
         public NoteContent content { get; set; }
+
+        /// <summary>
+        /// Any tags associated with the note
+        /// </summary>
         public List<Tags> tags { get; set; }
+
+        /// <summary>
+        /// Current users access token on this file/note
+        /// </summary>
         public NoteAccess access { get; set; }
+
+        /// <summary>
+        /// Can the user edit the note?
+        /// </summary>
         public bool CanEdit { get; set; }
+
+        /// <summary>
+        /// Is the user an admin?
+        /// </summary>
         public bool IsAdmin { get; set; }
     }
 }

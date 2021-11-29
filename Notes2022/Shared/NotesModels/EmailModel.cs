@@ -26,10 +26,24 @@
 
 namespace Notes2022.Shared
 {
+    /// <summary>
+    /// Used for sending Email.  The send module expects one of these
+    /// </summary>
     public class EmailModel
     {
+        /// <summary>
+        /// Address we are sending to
+        /// </summary>
         public string email { get; set; }
+
+        /// <summary>
+        /// Subject line for the email
+        /// </summary>
         public string subject { get; set; }
+
+        /// <summary>
+        /// Body of the message text or html
+        /// </summary>
         public string payload { get; set; }
     }
 }
