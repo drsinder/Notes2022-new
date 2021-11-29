@@ -20,6 +20,10 @@ namespace Notes2022.Server.Controllers
             _userManager = userManager;
         }
 
+        /// <summary>
+        /// Get List of all users
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<List<UserData>> Get()
         {

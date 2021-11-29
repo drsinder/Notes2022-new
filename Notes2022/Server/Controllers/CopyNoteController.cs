@@ -9,6 +9,9 @@ using System.Text;
 
 namespace Notes2022.Server.Controllers
 {
+    /// <summary>
+    /// Copy a note to another file
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class CopyNoteController : ControllerBase
@@ -29,24 +32,33 @@ namespace Notes2022.Server.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+        /// <summary>
+        /// Copy a note to another file
+        /// </summary>
+        /// <param name="Model"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task Post(CopyModel Model)
         {
+            // Who am I?
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             ApplicationUser user = await _userManager.FindByIdAsync(userId);
-            UserData = NoteDataManager.GetUserData(user);
+            UserData = NoteDataManager.GetUserData(user);   // get my data
 
             int fileId = Model.FileId;
 
+            // Can I write to the target file?
             string uid = UserData.UserId;
             NoteAccess myAccess = await AccessManager.GetAccess(_db, uid, fileId, 0);
             if (!myAccess.Write)
-                return;
+                return;         // can not write to file
 
+            // Prepare to copy
             NoteHeader Header = Model.Note;
             bool whole = Model.WholeString;
             noteFile = await _db.NoteFile.SingleAsync(p => p.Id == fileId);
 
+            // Just the note
             if (!whole)
             {
                 NoteContent cont = await _db.NoteContent.SingleAsync(p => p.NoteHeaderId == Header.Id);
@@ -76,10 +88,9 @@ namespace Notes2022.Server.Controllers
 
                 return;
             }
-            else
+            else    // whole note string
             {
-                // get base note
-
+                // get base note first
                 NoteHeader BaseHeader;
                 BaseHeader = await _db.NoteHeader.SingleAsync(p => p.NoteFileId == Header.NoteFileId
                     && p.ArchiveId == Header.ArchiveId
@@ -113,6 +124,7 @@ namespace Notes2022.Server.Controllers
 
                 NoteHeader NewHeader = await NoteDataManager.CreateNote(_db, Header, Body, Tags.ListToString(tags), Header.DirectorMessage, true, false);
 
+                // now deal with any responses
                 for (int i = 1; i <= BaseHeader.ResponseCount; i++)
                 {
                     NoteHeader RHeader = await _db.NoteHeader.SingleAsync(p => p.NoteFileId == BaseHeader.NoteFileId
@@ -145,10 +157,10 @@ namespace Notes2022.Server.Controllers
 
                     await NoteDataManager.CreateResponse(_db, Header, Body, Tags.ListToString(tags), Header.DirectorMessage, true, false);
                 }
-
             }
         }
 
+        // Utility method - makes a viewable header for the copied note
         private string MakeHeader(NoteHeader header)
         {
             StringBuilder sb = new();

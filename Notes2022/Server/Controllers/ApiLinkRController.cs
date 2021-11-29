@@ -45,7 +45,11 @@ namespace Notes2022.Server.Controllers
             _context = context;
         }
 
-
+        /// <summary>
+        /// Create Linked response
+        /// </summary>
+        /// <param name="inputModel"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<string> CreateLinkResponse(LinkCreateRModel inputModel)
         {
@@ -90,6 +94,11 @@ namespace Notes2022.Server.Controllers
             return "Ok";
         }
 
+        /// <summary>
+        /// Test for existance of file from remote system
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<string> Get(string file)
         {

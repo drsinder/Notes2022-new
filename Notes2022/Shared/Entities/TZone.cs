@@ -30,6 +30,9 @@ using System.Runtime.Serialization;
 
 namespace Notes2022.Shared
 {
+    /// <summary>
+    /// Obsolete with Blazor WASM
+    /// </summary>
     [DataContract]
     public class TZone
     {

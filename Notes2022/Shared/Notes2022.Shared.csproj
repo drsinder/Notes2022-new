@@ -6,6 +6,8 @@
     <Version>1.0.2</Version>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Entities\ExternalNote.cs" />
+    <Compile Remove="Entities\SystemMessage.cs" />
     <Compile Remove="NotesModels\INotes22022Service.cs" />
     <Compile Remove="NotesModels\LongWrapper.cs" />
     <Compile Remove="NotesModels\Message.cs" />

@@ -31,6 +31,10 @@ using System.Text.RegularExpressions;
 
 namespace Notes2022.Server
 {
+    /// <summary>
+    /// Does the import of a text file from an old plato/novanet system notefile
+    /// There be messy stuff in here!!!
+    /// </summary>
     public partial class Importer
     {
         private const char Ff = (char)(12); //  FF
@@ -39,6 +43,7 @@ namespace Notes2022.Server
         {
             Output("");
 
+            // Get the input file
             StreamReader file;
             try
             {
@@ -49,11 +54,13 @@ namespace Notes2022.Server
                 return false;
             }
 
+            // get the target file
             NoteFile noteFile = await NoteDataManager.GetFileByName(_db, myNotesFile);
 
             if (noteFile is null)
                 return false;
 
+            // Some initial setup
             //int id = noteFile.Id;
             int numberArchives = noteFile.NumberArchives;
             long counter = 0;
@@ -75,6 +82,7 @@ namespace Notes2022.Server
 
 
             // Read the file and process it line by line.
+            // we first determine the file type
             //try
             {
                 NoteHeader bnh;
@@ -83,7 +91,7 @@ namespace Notes2022.Server
                 while ((line = await file.ReadLineAsync()) is not null)
                 {
 
-                    if (counter == 0)
+                    if (counter == 0)   // first line of input file
                     {
                         if (line.StartsWith("2021 NoteFile ") || line.StartsWith("2022 NoteFile "))  // By this we know it came from Notes Web edition
                         {
@@ -97,7 +105,7 @@ namespace Notes2022.Server
                             await file.ReadLineAsync();
                             await file.ReadLineAsync();
                             await file.ReadLineAsync();
-                            var platoLine5 = await file.ReadLineAsync();
+                            var platoLine5 = await file.ReadLineAsync();    // has base year
                             await file.ReadLineAsync();
                             await file.ReadLineAsync();
 
@@ -108,7 +116,7 @@ namespace Notes2022.Server
                             string[] splits = platoLine5.Split(spaceTrim);
                             platoBaseYear = splits[splits.Length - 1];
 
-                        }
+                        }   // else we assume it's novanet format = 0
                     }
 
                     if (filetype == 0)  // Process for NovaNET output
@@ -241,7 +249,7 @@ namespace Notes2022.Server
                         counter++;
                     }  // end NovaNET
 
-                    else if (filetype == 1)  // Process from Notes 3.1 export as text
+                    else if (filetype == 1)  // Process from Notes 3.1 export as text - NOT TESTED IN A LONG TIME!!!
                     {
                         if (line.StartsWith("Note: "))  // possible note header
                         {
@@ -476,6 +484,7 @@ namespace Notes2022.Server
                     }  // end PLATO
                 }  // end where
 
+                // Cleanup after all lines in input file processed - YUCK!!
 
                 if (filetype == 0)  // NovaNET
                 {
@@ -589,7 +598,7 @@ namespace Notes2022.Server
         }
 
         /// <summary>
-        /// Process NovaNET formfeed
+        /// Process NovaNET formfeed - we need to eat some lines
         /// </summary>
         /// <param name="inline">input line</param>
         /// <param name="file">StreamReader for import file</param>

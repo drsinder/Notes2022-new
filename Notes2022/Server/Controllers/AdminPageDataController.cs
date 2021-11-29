@@ -31,6 +31,10 @@ using System.Security.Claims;
 
 namespace Notes2022.Server.Controllers
 {
+
+    /// <summary>
+    /// Gets Data used on the Admin page
+    /// </summary>
     //[Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
@@ -50,7 +54,12 @@ namespace Notes2022.Server.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
-
+        /// <summary>
+        /// Gets Data used on the Admin page
+        /// Returns the same Wrapper as for Home Page
+        /// but with more complete content.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<HomePageModel> Get()
         {

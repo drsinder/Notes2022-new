@@ -51,22 +51,24 @@ namespace Notes2022.Server.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
-
+        /// <summary>
+        /// Forward to an email address
+        /// </summary>
+        /// <param name="fv"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task Post(ForwardViewModel fv)
         {
+            // Who am I?
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             ApplicationUser user = await _userManager.FindByIdAsync(userId);
             UserData ud = NoteDataManager.GetUserData(user);
 
-            //NoteHeader nh = await NoteDataManager.GetBaseNoteHeaderById(_db, fv.NoteID);
-
+            // make the email
             string myEmail = await LocalService.MakeNoteForEmail(fv, fv.NoteFile, _db, ud.Email, ud.DisplayName);
 
+            // Enqueue the mail for sending
             EmailSender emailSender = new();
-
-            //await emailSender.SendEmailAsync(ud.Email, fv.NoteSubject, myEmail);
-
             BackgroundJob.Enqueue(() => emailSender.SendEmailAsync(ud.Email, fv.NoteSubject, myEmail));
         }
 

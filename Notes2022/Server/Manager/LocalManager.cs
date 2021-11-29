@@ -33,17 +33,19 @@ namespace Notes2022.Server
 {
     public static class LocalManager
     {
-        public static UserData GetUserData(ApplicationUser applicationUser)
-        {
-            return NoteDataManager.GetUserData(applicationUser);
-        }
-
+        /// <summary>
+        /// Get Users selected time zone
+        /// No longer needed with use of Blazor WASM!
+        /// </summary>
+        /// <param name="applicationUser"></param>
+        /// <param name="db"></param>
+        /// <returns></returns>
         public static async Task<TZone> GetUserTimeZone(ApplicationUser applicationUser, NotesDbContext db)
         {
             int tzid = Globals.TimeZoneDefaultID;
             try
             {
-                tzid = GetUserData(applicationUser).TimeZoneID;  // get users timezoneid
+                tzid = NoteDataManager.GetUserData(applicationUser).TimeZoneID;  // get users timezoneid
             }
             catch
             {
@@ -56,6 +58,11 @@ namespace Notes2022.Server
 
             return tz2;
         }
+
+        //public static UserData GetUserData(ApplicationUser applicationUser)
+        //{
+        //    return NoteDataManager.GetUserData(applicationUser);
+        //}
 
 
         //public static IEnumerable<SelectListItem> GetFileNameSelectList(NotesDbContext db)

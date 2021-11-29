@@ -29,6 +29,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Notes2022.Shared
 {
+    /// <summary>
+    /// Obsolete
+    /// </summary>
     public class HomePageMessage
     {
         [Required]

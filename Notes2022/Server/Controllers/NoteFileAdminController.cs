@@ -32,6 +32,9 @@ using System.Security.Claims;
 
 namespace Notes2022.Server.Controllers
 {
+    /// <summary>
+    /// NoteFile administration
+    /// </summary>
     [Route("api/[controller]")]
     [Route("api/[controller]/{id}")]
     [ApiController]
@@ -50,47 +53,67 @@ namespace Notes2022.Server.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+        /// <summary>
+        /// Get the list of notes files
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<List<NoteFile>> Get()
         {
             return await NoteDataManager.GetNoteFilesOrderedByName(_db);
         }
 
+        /// <summary>
+        /// Create a notefile
+        /// </summary>
+        /// <param name="crm"></param>
+        /// <returns></returns>
         //[Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task Post(CreateFileModel crm)
         {
+            // Who am I?
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             ApplicationUser user = await _userManager.FindByIdAsync(userId);
             bool test = await _userManager.IsInRoleAsync(user, "Admin");
-            if (!test)
+            if (!test)      // Not an admin?  Bye!
                 return;
 
             await NoteDataManager.CreateNoteFile(_db, _userManager, userId, crm.NoteFileName, crm.NoteFileTitle);
         }
 
-        //[Authorize(Roles = "Admin")]
+        /// <summary>
+        /// Delete a Note file
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete]
         public async Task Delete(string id)
         {
+            // Who am I?
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             ApplicationUser user = await _userManager.FindByIdAsync(userId);
             bool test = await _userManager.IsInRoleAsync(user, "Admin");
-            if (!test)
+            if (!test)  // Admin?  No - bye!
                 return;
 
             int intid = int.Parse(id);
             await NoteDataManager.DeleteNoteFile(_db, intid);
         }
 
-        //[Authorize(Roles = "Admin")]
+        /// <summary>
+        /// Update note file name/title
+        /// </summary>
+        /// <param name="edited"></param>
+        /// <returns></returns>
         [HttpPut]
         public async Task Put(NoteFile edited)
         {
+            // Who am I?
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             ApplicationUser user = await _userManager.FindByIdAsync(userId);
             bool test = await _userManager.IsInRoleAsync(user, "Admin");
-            if (!test)
+            if (!test)  // Admin?  No, Bye!
                 return;
 
             NoteFile live = await _db.NoteFile.FindAsync(edited.Id);

@@ -13,6 +13,12 @@ namespace Notes2022.Server.Controllers
         {
         }
 
+        /// <summary>
+        /// Gets for file existance at remote uri
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="file"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<bool> Get(string uri, string file)
         {

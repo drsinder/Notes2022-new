@@ -34,6 +34,20 @@ namespace Notes2022.Server
 {
     public static class AccessManager
     {
+        /// <summary>
+        /// Create an Access Token
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="userId"></param>
+        /// <param name="noteFileId"></param>
+        /// <param name="read"></param>
+        /// <param name="respond"></param>
+        /// <param name="write"></param>
+        /// <param name="setTag"></param>
+        /// <param name="deleteEdit"></param>
+        /// <param name="director"></param>
+        /// <param name="editAccess"></param>
+        /// <returns></returns>
         private static async Task<bool> Create(NotesDbContext db, string userId, int noteFileId, bool read, bool respond,
             bool write, bool setTag, bool deleteEdit, bool director, bool editAccess)
         {
@@ -81,24 +95,24 @@ namespace Notes2022.Server
                     return false;
             }
 
-            try
-            {
-                var user = await userManager.FindByNameAsync("readonly@example.com");
-                if (user is null)
-                    return true;
+            //try
+            //{
+            //    var user = await userManager.FindByNameAsync("readonly@example.com");
+            //    if (user is null)
+            //        return true;
 
-                string readonlyId = user.Id;
+            //    string readonlyId = user.Id;
 
-                {
-                    bool flag1 = await Create(db, readonlyId, fileId, false, false, false, false, false, false, false);
-                    if (!flag1)
-                        return false;
-                }
-            }
-            catch
-            {
-                // ignored
-            }
+            //    {
+            //        bool flag1 = await Create(db, readonlyId, fileId, false, false, false, false, false, false, false);
+            //        if (!flag1)
+            //            return false;
+            //    }
+            //}
+            //catch
+            //{
+            //    // ignored
+            //}
             return true;
         }
 

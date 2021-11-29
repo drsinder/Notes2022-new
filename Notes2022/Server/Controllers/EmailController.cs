@@ -42,13 +42,15 @@ namespace Notes2022.Server.Controllers
             _db = db;
         }
 
+        /// <summary>
+        /// Enqueues a note for sending
+        /// </summary>
+        /// <param name="stuff"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task Post(EmailModel stuff)
         {
             EmailSender sender = new EmailSender();
-
-            //await sender.SendEmailAsync(stuff.email, stuff.subject, stuff.payload);
-
             BackgroundJob.Enqueue(() => sender.SendEmailAsync(stuff.email, stuff.subject, stuff.payload));
         }
 

@@ -50,13 +50,19 @@ namespace Notes2022.Server.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+        /// <summary>
+        /// Gets everything needed to display a note
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="vers"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<DisplayModel> Get(long id, int vers)
         {
-
+            // Who am I?
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             ApplicationUser user = await _userManager.FindByIdAsync(userId);
-            bool isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+            bool isAdmin = await _userManager.IsInRoleAsync(user, "Admin"); // I'm special!
 
             NoteHeader nh = await _db.NoteHeader.SingleAsync(p => p.Id == id && p.Version == vers);
             NoteContent c = await _db.NoteContent.SingleAsync(p => p.NoteHeaderId == nh.Id);
@@ -65,8 +71,8 @@ namespace Notes2022.Server.Controllers
 
             NoteAccess access = await AccessManager.GetAccess(_db, userId, nh.NoteFileId, nh.ArchiveId);
 
-            bool canEdit = await _userManager.IsInRoleAsync(user, "Admin");
-            if (userId == nh.AuthorID)
+            bool canEdit = isAdmin;     // admins can always edit a note
+            if (userId == nh.AuthorID)  // otherwise only the author can edit
                 canEdit = true;
 
             return new DisplayModel { header = nh, content = c, tags = tags, noteFile = nf, access = access, CanEdit = canEdit, IsAdmin = isAdmin };

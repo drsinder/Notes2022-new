@@ -22,6 +22,13 @@ namespace Notes2022.Server.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+        /// <summary>
+        /// Creates an instance of the Import module and uses it
+        /// to import a text file to a notefile
+        /// </summary>
+        /// <param name="notefile">notefile name</param>
+        /// <param name="uploadfile">textfile name</param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<bool> Get(string notefile, string uploadfile)
         {

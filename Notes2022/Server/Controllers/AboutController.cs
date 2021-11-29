@@ -11,6 +11,10 @@ namespace Notes2022.Server.Controllers
         {
         }
 
+        /// <summary>
+        /// Gets the data for the About page.  Not much to it.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<AboutModel> Get()
         {

@@ -52,7 +52,11 @@ namespace Notes2022.Server.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
-
+        /// <summary>
+        /// Get Info to enable notes index display
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<NoteDisplayIndexModel> Get(int id)
         {
@@ -60,17 +64,18 @@ namespace Notes2022.Server.Controllers
 
             int arcId = 0;
 
+            // Who am I?
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             ApplicationUser user = await _userManager.FindByIdAsync(userId);
             bool isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
             bool isUser = await _userManager.IsInRoleAsync(user, "User");
             if (!isUser)
-                return idxModel;
+                return idxModel;    // not a User?  You get NOTHING!
 
             idxModel.myAccess = await GetMyAccess(user, id, arcId);
             if (isAdmin)
             {
-                idxModel.myAccess.ViewAccess = true;
+                idxModel.myAccess.ViewAccess = true; // Admins can always view access list
             }
             idxModel.noteFile = await NoteDataManager.GetFileById(_db, id);
 
@@ -84,11 +89,13 @@ namespace Notes2022.Server.Controllers
             if (linklist is not null && linklist.Count > 0)
                 idxModel.linkedText = " (Linked)";
 
+            // Add headers for file
             idxModel.AllNotes = await NoteDataManager.GetAllHeaders(_db, id, arcId);
 
+            // Base note headers for file
             idxModel.Notes = idxModel.AllNotes.FindAll(p => p.ResponseOrdinal == 0).OrderBy(p => p.NoteOrdinal).ToList();
 
-            idxModel.UserData = LocalManager.GetUserData(user);
+            idxModel.UserData = NoteDataManager.GetUserData(user);
             idxModel.tZone = await LocalManager.GetUserTimeZone(user, _db);
 
             idxModel.Tags = await _db.Tags.Where(p => p.NoteFileId == id && p.ArchiveId == arcId).ToListAsync();
@@ -104,7 +111,7 @@ namespace Notes2022.Server.Controllers
         /// </summary>
         /// <param name="fileid"></param>
         /// <returns></returns>
-        public async Task<NoteAccess> GetMyAccess(ApplicationUser me, int fileid, int ArcId)
+        private async Task<NoteAccess> GetMyAccess(ApplicationUser me, int fileid, int ArcId)
         {
 
             NoteAccess noteAccess = await AccessManager.GetAccess(_db, me.Id, fileid, ArcId);

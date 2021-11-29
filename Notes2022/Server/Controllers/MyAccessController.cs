@@ -51,15 +51,22 @@ namespace Notes2022.Server.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+        /// <summary>
+        /// Gets current user access to the given file
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<NoteAccess> Get(int Id)
         {
+            // Who Am I?
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             ApplicationUser me = await _userManager.FindByIdAsync(userId);
 
+            // get my access token
             NoteAccess mine = await _db.NoteAccess.Where(p => p.NoteFileId == Id && p.UserID == me.Id && p.ArchiveId == 0).OrderBy(p => p.ArchiveId).FirstOrDefaultAsync();
 
-            if (mine is null)
+            if (mine is null)   // none?  Get Other token! Generic access token for file
             {
                 mine = await _db.NoteAccess.Where(p => p.NoteFileId == Id && p.UserID == Globals.AccessOtherId() && p.ArchiveId == 0).OrderBy(p => p.ArchiveId).FirstOrDefaultAsync();
             }

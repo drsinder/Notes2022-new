@@ -23,6 +23,14 @@ namespace Notes2022.Server.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+        /// <summary>
+        /// Get Version NoteHeader list for given note
+        /// </summary>
+        /// <param name="fileid"></param>
+        /// <param name="ordinal"></param>
+        /// <param name="respordinal"></param>
+        /// <param name="arcid"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<List<NoteHeader>> Get(int fileid, int ordinal, int respordinal, int arcid)
         {

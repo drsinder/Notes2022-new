@@ -13,6 +13,11 @@ namespace Notes2022.Server.Controllers
         {
         }
 
+        /// <summary>
+        /// Test for a live Notes2022 system at remote uri
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<bool> Get(string uri)
         {

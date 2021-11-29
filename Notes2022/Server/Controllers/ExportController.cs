@@ -42,31 +42,31 @@ namespace Notes2022.Server.Controllers
             _db = db;
         }
 
+        /// <summary>
+        /// Get list of notes for export
+        /// </summary>
+        /// <param name="modelstring">input is in four parts - see below</param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<List<NoteHeader>> Get(string modelstring)
         {
-            int arcId;
-            int fileId;
-            int noteOrd;
-            int respOrd;
-
             string[] parts = modelstring.Split(".");
 
-            fileId = int.Parse(parts[0]);
-            arcId = int.Parse(parts[1]);
-            noteOrd = int.Parse(parts[2]);
-            respOrd = int.Parse(parts[3]);
+            int fileId = int.Parse(parts[0]);   // fileId
+            int arcId = int.Parse(parts[1]);    // ArchiveId
+            int noteOrd = int.Parse(parts[2]);  // Note Ordinal
+            int respOrd = int.Parse(parts[3]);  // Response Ordinal
 
             List<NoteHeader> nhl;
 
-            if (noteOrd == 0)
+            if (noteOrd == 0)   // All base notes
             {
                 nhl = await _db.NoteHeader
                     .Where(p => p.NoteFileId == fileId && p.ArchiveId == arcId && p.ResponseOrdinal == 0)
                     .OrderBy(p => p.NoteOrdinal)
                     .ToListAsync();
             }
-            else
+            else                // Just one base note/response
             {
                 nhl = await _db.NoteHeader
                     .Where(p => p.NoteFileId == fileId && p.ArchiveId == arcId && p.NoteOrdinal == noteOrd && p.ResponseOrdinal == respOrd)

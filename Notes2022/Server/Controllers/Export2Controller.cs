@@ -42,6 +42,11 @@ namespace Notes2022.Server.Controllers
             _db = db;
         }
 
+        /// <summary>
+        /// Gets the content of a note while exporting
+        /// </summary>
+        /// <param name="modelstring"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<NoteContent> Get(string modelstring)
         {

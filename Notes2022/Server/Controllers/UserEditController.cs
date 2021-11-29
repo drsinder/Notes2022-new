@@ -45,6 +45,12 @@ namespace Notes2022.Server.Controllers
             _userManager = userManager;
         }
 
+        /// <summary>
+        /// Get preferences for a given userID along with their roles and some extra info
+        /// Used for editing roles a user is assigned to
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<EditUserViewModel> Get(string Id)
         {
@@ -54,10 +60,12 @@ namespace Notes2022.Server.Controllers
 
             var myRoles = await _userManager.GetRolesAsync(user);
 
+            // list of all notes2022 roles
             List<IdentityRole> allRoles = _db.Roles.OrderBy(p => p.Name).ToList();
 
             List<CheckedUser> myList = new List<CheckedUser>();
 
+            // users membership in each role
             foreach (IdentityRole item in allRoles)
             {
                 CheckedUser it = new CheckedUser();
@@ -76,6 +84,11 @@ namespace Notes2022.Server.Controllers
             return stuff;
         }
 
+        /// <summary>
+        /// Update role membership
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPut]
         public async Task Put(EditUserViewModel model)
         {

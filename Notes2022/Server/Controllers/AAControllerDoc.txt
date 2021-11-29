@@ -1,0 +1,26 @@
+﻿Most of the controllers in the folder are called by the shared project
+DAL.  These are NOT:  Those beginning with Api, OidcConfigurationController,
+and ImageController.
+
+These provide access to functional sets of data, NOT to primitive 
+data (Tables/Rows).
+
+The DAL provides a place to isolate the calls which depend on hard coded
+strings rather than refrences to classes/object.  It also provide a 
+place to "Package" some of the input data.
+
+Generally speaking the constructors grab:
+
+        // access to data
+        private readonly NotesDbContext _db;
+        // access to the user data instance
+        private readonly UserManager<ApplicationUser> _userManager;
+        // helper to get userid
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+The last two are usually used for access checking of some kind.
+
+In in general I'd like to do most of the work in the static classes in
+the Manager folder.  I've not followed through on that as well
+as I should.  Area for later work!
+

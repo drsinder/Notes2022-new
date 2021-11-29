@@ -191,9 +191,9 @@ namespace Notes2022.Shared
             return nh;
         }
 
-        public static explicit operator NoteHeader(Task<NoteHeader> v)
-        {
-            throw new NotImplementedException();
-        }
+        //public static explicit operator NoteHeader(Task<NoteHeader> v)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

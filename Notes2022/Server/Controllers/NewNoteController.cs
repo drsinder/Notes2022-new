@@ -53,6 +53,11 @@ namespace Notes2022.Server.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+        /// <summary>
+        /// Get a NoteFile object from its Id
+        /// </summary>
+        /// <param name="fileId"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<NoteFile> Get(int fileId)
         {
@@ -60,22 +65,28 @@ namespace Notes2022.Server.Controllers
             return nf;
         }
 
+        /// <summary>
+        /// Create a new note
+        /// </summary>
+        /// <param name="tvm"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task Post(TextViewModel tvm)
         {
-            if (tvm.MyNote is null)
+            if (tvm.MyNote is null)     // sanity check
                 return;
 
+            // Who am I?
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             ApplicationUser user = await _userManager.FindByIdAsync(userId);
             bool test = await _userManager.IsInRoleAsync(user, "User");
-            if (!test)
+            if (!test)  // Must be in a User Role
                 return;
 
-            ApplicationUser me = await _userManager.FindByIdAsync(userId);
+            ApplicationUser me = user;
 
             DateTime now = DateTime.Now.ToUniversalTime();
-            NoteHeader nheader = new()
+            NoteHeader nheader = new()  // construct a new NoteHeader
             {
                 LastEdited = now,
                 ThreadLastEdited = now,
@@ -91,24 +102,29 @@ namespace Notes2022.Server.Controllers
 
             NoteHeader created;
 
-            if (tvm.BaseNoteHeaderID == 0)
+            if (tvm.BaseNoteHeaderID == 0)  // a base note
             {
                 created = await NoteDataManager.CreateNote(_db, nheader, tvm.MyNote, tvm.TagLine, tvm.DirectorMessage, true, false);
             }
-            else
+            else        // a response
             {
                 nheader.BaseNoteId = tvm.BaseNoteHeaderID;
                 nheader.RefId = tvm.RefId;
                 created = await NoteDataManager.CreateResponse(_db, nheader, tvm.MyNote, tvm.TagLine, tvm.DirectorMessage, true, false);
             }
 
-
+            // Process any linked note file
             await ProcessLinkedNotes();
 
+            // Send copy to subscribers
             await SendNewNoteToSubscribers(created);
-
         }
 
+        /// <summary>
+        /// Edit a note
+        /// </summary>
+        /// <param name="tvm"></param>
+        /// <returns></returns>
         [HttpPut]
         public async Task Put(TextViewModel tvm)
         {
@@ -138,6 +154,9 @@ namespace Notes2022.Server.Controllers
             return;
         }
 
+        /// <summary>
+        /// Send a copy of this note to any subscribers 
+        /// </summary>
         private async Task SendNewNoteToSubscribers(NoteHeader myNote)
         {
             List<Subscription> subs = await _db.Subscription
@@ -161,11 +180,15 @@ namespace Notes2022.Server.Controllers
                 ApplicationUser usr = await _userManager.FindByIdAsync(s.SubscriberId);
 
                 NoteAccess na = await AccessManager.GetAccess(_db, usr.Id, s.NoteFileId, 0);
-                if (na.ReadAccess)
+                if (na.ReadAccess)  // MUST have read access NOW!
                     BackgroundJob.Enqueue(() => emailSender.SendEmailAsync(usr.UserName, myNote.NoteSubject, myEmail));
             }
         }
 
+        /// <summary>
+        /// Enqueue notes for other systems that may be linked
+        /// </summary>
+        /// <returns></returns>
         private async Task ProcessLinkedNotes()
         {
             List<LinkQueue> items = await _db.LinkQueue.Where(p => p.Enqueued == false).ToListAsync();

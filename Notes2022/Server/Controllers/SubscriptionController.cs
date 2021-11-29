@@ -53,12 +53,18 @@ namespace Notes2022.Server.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+        /// <summary>
+        /// Get subscriptions for current user
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<List<Subscription>> Get()
         {
+            // Who am I?
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             ApplicationUser me = await _userManager.FindByIdAsync(userId);
 
+            // my list
             List<Subscription> mine = await _db.Subscription.Where(p => p.SubscriberId == me.Id).ToListAsync();
 
             if (mine is null)
@@ -69,7 +75,7 @@ namespace Notes2022.Server.Controllers
             foreach (Subscription m in mine)
             {
                 NoteAccess na = await AccessManager.GetAccess(_db, userId, m.NoteFileId, 0);
-                if (na.ReadAccess)
+                if (na.ReadAccess)  // must have read access!!
                     avail.Add(m);
             }
 

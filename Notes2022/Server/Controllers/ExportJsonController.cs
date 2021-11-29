@@ -42,16 +42,18 @@ namespace Notes2022.Server.Controllers
             _db = db;
         }
 
+        /// <summary>
+        /// Get a Model that will be turned into Json for export
+        /// </summary>
+        /// <param name="modelstring">In two parts</param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<JsonExport> Get(string modelstring)
         {
-            int arcId;
-            int fileId;
-
             string[] parts = modelstring.Split(".");
 
-            fileId = int.Parse(parts[0]);
-            arcId = int.Parse(parts[1]);
+            int fileId = int.Parse(parts[0]);
+            int arcId = int.Parse(parts[1]);
 
             JsonExport stuff = new JsonExport();
 

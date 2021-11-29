@@ -10,14 +10,14 @@
   <Class Name="Notes2022.Shared.NoteHeader">
     <Position X="5.75" Y="1.5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>IAACAgAQAAgYAAgACABgAAQwAAAAQEAAAOABAQAAABA=</HashCode>
+      <HashCode>IAACAgAQAAgYAAgACABgAAQwAAAAQEAAAGABAQAAABA=</HashCode>
       <FileName>Entities\NoteHeader.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Notes2022.Shared.NoteContent">
     <Position X="8.75" Y="1.5" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAEAAAAAAAAAgAAAABA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAEAAAAAAAAAgAAAAAA=</HashCode>
       <FileName>Entities\NoteContent.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -52,14 +52,14 @@
   <Class Name="Notes2022.Shared.Sequencer">
     <Position X="11.5" Y="3.5" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAgAABAAAAgAIAIAAAAgAAACAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAgAABAAAAgAIAIAAAAgAAAAAAAAAAA=</HashCode>
       <FileName>Entities\Sequencer.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Notes2022.Shared.Search">
     <Position X="13.75" Y="1.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAQAAgAAAAACAggACAAAAgAAAACCAAAARA=</HashCode>
+      <HashCode>AAAAAAAAAAAQAAgAAAAACAggACAAAAgAAAAACAAAARA=</HashCode>
       <FileName>Entities\Search.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -68,20 +68,6 @@
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAQAAgAAAAgAAggAAEAAAAAAAASAAAAAAA=</HashCode>
       <FileName>Entities\Mark.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Notes2022.Shared.SQLFile">
-    <Position X="16.25" Y="4.25" Width="2" />
-    <TypeIdentifier>
-      <HashCode>AAAABAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAQAAJAIAA=</HashCode>
-      <FileName>Entities\SQLFile.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Notes2022.Shared.SQLFileContent">
-    <Position X="16.25" Y="6.5" Width="2" />
-    <TypeIdentifier>
-      <HashCode>QAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAA=</HashCode>
-      <FileName>Entities\SQLFile.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Enum Name="Notes2022.Shared.SearchOption">

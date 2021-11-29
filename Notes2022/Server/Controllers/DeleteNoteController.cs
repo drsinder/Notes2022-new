@@ -24,10 +24,15 @@ namespace Notes2022.Server.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
-
+        /// <summary>
+        /// Marks the given note as deleted
+        /// </summary>
+        /// <param name="noteid">Id of note to delete</param>
+        /// <returns></returns>
         [HttpDelete]
         public async Task Delete(long noteid)
         {
+            // Who am I and am I at least in a User Role?
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             ApplicationUser user = await _userManager.FindByIdAsync(userId);
             bool test = await _userManager.IsInRoleAsync(user, "User");

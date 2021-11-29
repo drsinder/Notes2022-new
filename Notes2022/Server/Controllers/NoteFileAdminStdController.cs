@@ -33,7 +33,9 @@ using System.Security.Claims;
 
 namespace Notes2022.Server.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    /// <summary>
+    /// Creates one of the 5 standard file for an installation
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class NoteFileAdminStdController : Controller
@@ -51,6 +53,11 @@ namespace Notes2022.Server.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+        /// <summary>
+        /// Create a STD file by name
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task Post(Stringy file)
         {
@@ -81,6 +88,12 @@ namespace Notes2022.Server.Controllers
             }
         }
 
+        /// <summary>
+        /// The actual create is done here
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="title"></param>
+        /// <returns></returns>
         public async Task<bool> CreateNoteFile(string name, string title)
         {
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -102,6 +115,8 @@ namespace Notes2022.Server.Controllers
         {
             await CreateNoteFile("announce", "Notes 2022 Announcements");
             NoteFile nf4 = await NoteDataManager.GetFileByName(_db, "announce");
+
+            // set read access for Other in Announce
             int padid = nf4.Id;
             NoteAccess access = await AccessManager.GetOneAccess(_db, Globals.AccessOtherId(), padid, 0);
             access.ReadAccess = true;
@@ -114,6 +129,8 @@ namespace Notes2022.Server.Controllers
         {
             await CreateNoteFile("pbnotes", "Public Notes");
             NoteFile nf4 = await NoteDataManager.GetFileByName(_db, "pbnotes");
+
+            // set read, write, respond access to Pbnotes
             int padid = nf4.Id;
             NoteAccess access = await AccessManager.GetOneAccess(_db, Globals.AccessOtherId(), padid, 0);
             access.ReadAccess = true;
@@ -128,6 +145,8 @@ namespace Notes2022.Server.Controllers
         {
             await CreateNoteFile("noteshelp", "Help with Notes 2022");
             NoteFile nf4 = await NoteDataManager.GetFileByName(_db, "noteshelp");
+
+            // Set read, write, respond access to Noteshelp
             int padid = nf4.Id;
             NoteAccess access = await AccessManager.GetOneAccess(_db, Globals.AccessOtherId(), padid, 0);
             access.ReadAccess = true;
@@ -142,6 +161,8 @@ namespace Notes2022.Server.Controllers
         {
             await CreateNoteFile("pad", "Traditional Pad");
             NoteFile nf4 = await NoteDataManager.GetFileByName(_db, "pad");
+
+            // Set read, write, respond access to pad
             int padid = nf4.Id;
             NoteAccess access = await AccessManager.GetOneAccess(_db, Globals.AccessOtherId(), padid, 0);
             access.ReadAccess = true;

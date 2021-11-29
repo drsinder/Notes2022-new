@@ -32,6 +32,10 @@ using System.Security.Claims;
 
 namespace Notes2022.Server.Controllers
 {
+
+    /// <summary>
+    /// Controller for Access tokens
+    /// </summary>
     [Route("api/[controller]/{fileId}")]
     [Route("api/[controller]")]
     [ApiController]
@@ -49,6 +53,11 @@ namespace Notes2022.Server.Controllers
             _userManager = userManager;
             _httpContextAccessor = httpContextAccessor;
         }
+        /// <summary>
+        /// Gets the Access tokens for a file
+        /// </summary>
+        /// <param name="fileId"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<List<NoteAccess>> Get(string fileId)
         {
@@ -57,22 +66,30 @@ namespace Notes2022.Server.Controllers
             return list;
         }
 
+        /// <summary>
+        /// Updates the access token
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         [HttpPut]
         public async Task Put(NoteAccess item)
         {
+            // Who am I?
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             ApplicationUser me = await _userManager.FindByIdAsync(userId);
-
+            // Do I have access to edit this item?
             NoteAccess myAccess = await AccessManager.GetAccess(_db, me.Id, item.NoteFileId, item.ArchiveId);
             if (!myAccess.EditAccess)
-                return;
+                return;                 // no access
 
+            // get a working copy of the token
             NoteAccess work = await _db.NoteAccess.Where(p => p.NoteFileId == item.NoteFileId
                 && p.ArchiveId == item.ArchiveId && p.UserID == item.UserID)
                 .FirstOrDefaultAsync();
             if (work is null)
                 return;
 
+            // Copy the access elements leaving the ID alone
             work.ReadAccess = item.ReadAccess;
             work.Respond = item.Respond;
             work.Write = item.Write;
@@ -81,17 +98,24 @@ namespace Notes2022.Server.Controllers
             work.ViewAccess = item.ViewAccess;
             work.EditAccess = item.EditAccess;
 
+            // Update it
             _db.Update(work);
             _db.Entry(work).State = EntityState.Modified;
             await _db.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Create a new Access Token
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task Post(NoteAccess item)
         {
+            // Who am I?
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             ApplicationUser me = await _userManager.FindByIdAsync(userId);
-
+            // Do I have access?
             NoteAccess myAccess = await AccessManager.GetAccess(_db, me.Id, item.NoteFileId, item.ArchiveId);
             if (!myAccess.EditAccess)
                 return;
@@ -114,9 +138,18 @@ namespace Notes2022.Server.Controllers
             await _db.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Delete Access token
+        /// </summary>
+        /// <param name="fileId">this is a string that identfies the token in three parts - see below</param>
+        /// <returns></returns>
         [HttpDelete]
         public async Task Delete(string fileId)
         {
+            // The input is a three part string with . for a delimiter:
+            // 0: fileId
+            // 1: archiveId
+            // 2: UserId
             string[] parts = fileId.Split(".");
             if (parts.Length != 3)
                 return;
@@ -146,7 +179,6 @@ namespace Notes2022.Server.Controllers
 
             _db.NoteAccess.Remove(work);
             await _db.SaveChangesAsync();
-
         }
 
     }

@@ -94,7 +94,7 @@ namespace Notes2022.Shared
         public bool Pref1 { get; set; } // false = use paged note index, true= scrolled
 
         [DataMember(Order = 17)]
-        public bool Pref2 { get; set; } // use alternate editor
+        public bool Pref2 { get; set; } // use alternate editor - obsolete
 
         [DataMember(Order = 18)]
         public bool Pref3 { get; set; } // show responses by default

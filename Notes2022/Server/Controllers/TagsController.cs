@@ -42,11 +42,14 @@ namespace Notes2022.Server.Controllers
             _db = db;
         }
 
+        /// <summary>
+        /// Get Tags associated with a note
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<List<Tags>> Get(long Id)
         {
-            //long Id = long.Parse(sid);
-
             return await _db.Tags.Where(p => p.NoteFileId == Id).ToListAsync();
         }
     }

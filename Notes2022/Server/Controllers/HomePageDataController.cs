@@ -32,6 +32,9 @@ using System.Security.Claims;
 
 namespace Notes2022.Server.Controllers
 {
+    /// <summary>
+    /// Gets Data used on the Home Page
+    /// </summary>
     //[AllowAnonymous]
     [Route("api/[controller]")]
     [ApiController]
@@ -50,6 +53,12 @@ namespace Notes2022.Server.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+        /// <summary>
+        /// Gets Data used on the Home page
+        /// Returns the same Wrapper as for Admin Page
+        /// but with filtered content for list of files.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<HomePageModel> Get()
         {
@@ -77,15 +86,16 @@ namespace Notes2022.Server.Controllers
 
                 if (!string.IsNullOrEmpty(userId))
                 {
+                    // Who am I?
                     ApplicationUser user = await _userManager.FindByIdAsync(userId);
                     model.UserData = NoteDataManager.GetUserData(user);
-
+                    // Get my access for each file
                     foreach (NoteFile nf in model.NoteFiles)
                     {
                         NoteAccess na = await AccessManager.GetAccess(_db, user.Id, nf.Id, 0);
                         model.NoteAccesses.Add(na);
                     }
-
+                    // Remove files I can not read, write, or edit access for
                     if (model.NoteAccesses.Count > 0)
                     {
                         NoteFile[] theList = new NoteFile[model.NoteFiles.Count];
@@ -109,18 +119,6 @@ namespace Notes2022.Server.Controllers
             {
                 model.UserData = new UserData { TimeZoneID = Globals.TimeZoneDefaultID };
             }
-
-            //Globals.GuestId = model.GuestId = "*none*";
-            //UserData Gdata = _db.UserData.Where(p => p.DisplayName == "Guest").FirstOrDefault();
-            //if (Gdata is not null)
-            //{
-            //    Globals.GuestId = model.GuestId = Gdata.UserId;
-
-            //    IdentityUser me = await _userManager.FindByIdAsync(Globals.GuestId);
-
-            //    model.GuestEmail = Globals.GuestEmail = me.Email;
-            //}
-
             return model;
         }
     }

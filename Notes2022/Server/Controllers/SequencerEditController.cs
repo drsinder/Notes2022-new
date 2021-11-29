@@ -51,7 +51,11 @@ namespace Notes2022.Server.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
-
+        /// <summary>
+        /// Edit sequencer - used to edit ordinal
+        /// </summary>
+        /// <param name="seq"></param>
+        /// <returns></returns>
         [HttpPut]
         public async Task Put(Sequencer seq)
         {

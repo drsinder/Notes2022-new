@@ -136,6 +136,13 @@ namespace Notes2022.Server
             return true;
         }
 
+        /// <summary>
+        /// Archive a notefile - Bump the files NumberArchives -
+        /// Set all current ArchiveId (=0) to NumberArchives for
+        /// NoteHeader, NoteAccess, Tags
+        /// </summary>
+        /// <param name="_db"></param>
+        /// <param name="noteFile"></param>
         public static void ArchiveNoteFile(NotesDbContext _db, NoteFile noteFile)
         {
             noteFile.NumberArchives++;
@@ -166,6 +173,18 @@ namespace Notes2022.Server
             _db.SaveChanges();
         }
 
+        /// <summary>
+        /// Create a new note
+        /// </summary>
+        /// <param name="db">Database</param>
+        /// <param name="nh">NoteHeader for new note</param>
+        /// <param name="body">Note content</param>
+        /// <param name="tags">the tags</param>
+        /// <param name="dMessage">Director message (hold over from when it was not in header...)</param>
+        /// <param name="send">Should we send emails? / Is this an Imported note?</param>
+        /// <param name="linked">Are we processing linked file?</param>
+        /// <param name="editing">Are we editing?</param>
+        /// <returns></returns>
         public static async Task<NoteHeader> CreateNote(NotesDbContext db, NoteHeader nh, string body, string tags, string dMessage, bool send, bool linked, bool editing = false)
         {
             long editingId = nh.Id;
@@ -173,10 +192,11 @@ namespace Notes2022.Server
             nh.Id = 0;
             if (nh.ResponseOrdinal == 0 && !editing)  // base note
             {
+                // get the next available note Ordinal
                 nh.NoteOrdinal = await NextBaseNoteOrdinal(db, nh.NoteFileId, nh.ArchiveId);
             }
 
-            if (!linked && !editing)
+            if (!linked && !editing)    // create a GUID for use over link
             {
                 nh.LinkGuid = Guid.NewGuid().ToString();
             }
@@ -187,6 +207,7 @@ namespace Notes2022.Server
                 if (nh.LastEdited.IsDaylightSavingTime())
                     offset--;
 
+                // throw in an added random time in ms
                 Random rand = new();
                 int ms = rand.Next(999);
 
@@ -206,7 +227,7 @@ namespace Notes2022.Server
 
             NoteHeader newHeader = nh;
 
-            if (newHeader.ResponseOrdinal == 0)
+            if (newHeader.ResponseOrdinal == 0) // base note
             {
                 newHeader.BaseNoteId = newHeader.Id;
                 db.Entry(newHeader).State = EntityState.Modified;
@@ -223,9 +244,8 @@ namespace Notes2022.Server
                 }
 
                 await db.SaveChangesAsync();
-
             }
-            else
+            else    // response
             {
                 NoteHeader baseNote = await db.NoteHeader
                     .Where(p => p.NoteFileId == newHeader.NoteFileId && p.ArchiveId == newHeader.ArchiveId && p.NoteOrdinal == newHeader.NoteOrdinal && p.ResponseOrdinal == 0)
@@ -280,7 +300,7 @@ namespace Notes2022.Server
             }
             else
             {
-                foreach (var link in links)
+                foreach (var link in links) // que up the linked notes
                 {
                     if (link.SendTo)
                     {
@@ -302,10 +322,21 @@ namespace Notes2022.Server
             return newHeader;
         }
 
-
-
+        /// <summary>
+        /// Create a new Response - See CreateNote for params
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="nh"></param>
+        /// <param name="body"></param>
+        /// <param name="tags"></param>
+        /// <param name="dMessage"></param>
+        /// <param name="send"></param>
+        /// <param name="linked"></param>
+        /// <param name="editing"></param>
+        /// <returns></returns>
         public static async Task<NoteHeader> CreateResponse(NotesDbContext db, NoteHeader nh, string body, string tags, string dMessage, bool send, bool linked, bool editing = false)
         {
+            // do setup and call CreateNote
             NoteHeader mine = await GetBaseNoteHeader(db, nh.BaseNoteId);
             db.Entry(mine).State = EntityState.Unchanged;
             await db.SaveChangesAsync();
@@ -346,6 +377,12 @@ namespace Notes2022.Server
             }
         }
 
+        /// <summary>
+        /// Delete a linked note - NOT called now...
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="nh"></param>
+        /// <returns></returns>
         public static async Task<string> DeleteLinked(NotesDbContext db, NoteHeader nh)
         {
             // Check for linked notefile(s)
@@ -380,7 +417,15 @@ namespace Notes2022.Server
             return "Ok";
         }
 
-
+        /// <summary>
+        /// Edit a note - does setup to keep version history then creates a new note: CreateNote
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="userManager"></param>
+        /// <param name="nh"></param>
+        /// <param name="nc"></param>
+        /// <param name="tags"></param>
+        /// <returns></returns>
         public static async Task<NoteHeader> EditNote(NotesDbContext db, UserManager<ApplicationUser> userManager, NoteHeader nh, NoteContent nc, string tags)
         {
             // this is for making the current version 0 a higher version and creating a new version 0
@@ -490,6 +535,11 @@ namespace Notes2022.Server
         //    return content;
         //}
 
+        /// <summary>
+        /// Copy user prefs from ApplicationUser to UserData entity
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public static UserData GetUserData(ApplicationUser user)
         {
             UserData aux = new();
@@ -526,6 +576,12 @@ namespace Notes2022.Server
             return aux;
         }
 
+        /// <summary>
+        /// Put user data from UserData into ApplicationUser Entity
+        /// </summary>
+        /// <param name="aux"></param>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public static ApplicationUser PutUserData(ApplicationUser aux, UserData user)
         {
 
@@ -561,6 +617,13 @@ namespace Notes2022.Server
             return aux;
         }
 
+        /// <summary>
+        /// Write user data to Db
+        /// </summary>
+        /// <param name="userManager"></param>
+        /// <param name="httpContextAccessor"></param>
+        /// <param name="db"></param>
+        /// <param name="userD"></param>
         public static void PutUserData(UserManager<ApplicationUser> userManager, IHttpContextAccessor httpContextAccessor, NotesDbContext db, UserData userD)
         {
             try
@@ -597,6 +660,12 @@ namespace Notes2022.Server
         //        .FirstOrDefaultAsync();
         //}
 
+        /// <summary>
+        /// Get notefile object from a file name
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="fname"></param>
+        /// <returns></returns>
         public static async Task<NoteFile> GetFileByName(NotesDbContext db, string fname)
         {
             return await db.NoteFile
@@ -668,6 +737,12 @@ namespace Notes2022.Server
                             .OrderByDescending(p => p.NoteOrdinal);
         }
 
+        /// <summary>
+        /// Get notefile entity from its Id
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public static async Task<NoteFile> GetFileById(NotesDbContext db, int id)
         {
             return await db.NoteFile
@@ -700,6 +775,12 @@ namespace Notes2022.Server
         //        .ToListAsync();
         //}
 
+        /// <summary>
+        /// No Longer includes NoteFile but does include NoteContent
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="noteid"></param>
+        /// <returns></returns>
         public static async Task<NoteHeader> GetNoteByIdWithFile(NotesDbContext db, long noteid)
         {
             return await db.NoteHeader
@@ -712,6 +793,12 @@ namespace Notes2022.Server
 
         }
 
+        /// <summary>
+        /// Get a NoteHeader given its Id
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public static async Task<NoteHeader> GetBaseNoteHeader(NotesDbContext db, long id)
         {
             NoteHeader nh = await db.NoteHeader
@@ -866,6 +953,7 @@ namespace Notes2022.Server
         //    return nf;
         //}
 
+        
         public static async Task<List<NoteHeader>> GetAllHeaders(NotesDbContext db, int id, int arcId)
         {
             return await db.NoteHeader.Where(p => p.NoteFileId == id && p.ArchiveId == arcId).ToListAsync();
@@ -1013,6 +1101,7 @@ namespace Notes2022.Server
         //        .FirstAsync();
         //}
 
+        
         public static async Task<NoteHeader> GetBaseNoteHeaderById(NotesDbContext db, long id)
         {
             return await db.NoteHeader

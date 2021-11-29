@@ -49,10 +49,14 @@ namespace Notes2022.Server.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
-
+        /// <summary>
+        /// Get personal data for current  user (preferences)
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<UserData> Get()
         {
+            // Who am I?
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             if (!string.IsNullOrEmpty(userId))
@@ -64,6 +68,11 @@ namespace Notes2022.Server.Controllers
             return null;
         }
 
+        /// <summary>
+        /// Updates the current users personal data
+        /// </summary>
+        /// <param name="uData"></param>
+        /// <returns></returns>
         [HttpPut]
         public async Task Put(UserData uData)
         {

@@ -26,6 +26,9 @@
 
 namespace Notes2022.Shared
 {
+    /// <summary>
+    /// Obsolete
+    /// </summary>
     public class SystemMessage
     {
         public string? message { get; set; }

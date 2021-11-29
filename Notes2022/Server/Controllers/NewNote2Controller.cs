@@ -40,6 +40,10 @@ namespace Notes2022.Server.Controllers
             _db = db;
         }
 
+        /// <summary>
+        /// Get most recent note header
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<NoteHeader> Get()
         {

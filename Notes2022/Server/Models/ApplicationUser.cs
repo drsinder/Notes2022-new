@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Notes2022.Server.Models
 {
+    /// <summary>
+    /// Extentions to the base IdentityUser
+    /// </summary>
     public class ApplicationUser : IdentityUser
     {
 

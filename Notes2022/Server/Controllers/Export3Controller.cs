@@ -42,6 +42,13 @@ namespace Notes2022.Server.Controllers
             _db = db;
         }
 
+        /// <summary>
+        /// I don't think this is ever called!!
+        /// It was intended at one time to get all responses
+        /// for export at one time.
+        /// </summary>
+        /// <param name="modelstring"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<List<NoteHeader>> Get(string modelstring)
         {

@@ -18,11 +18,15 @@ namespace Notes2022.Server.Controllers
             _db = db;
         }
 
+        /// <summary>
+        /// Given a NoteId gets its FileId
+        /// </summary>
+        /// <param name="NoteId"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<int> Get(long NoteId)
         {
             NoteHeader header = _db.NoteHeader.SingleOrDefault(p => p.Id == NoteId);
-
             return header.NoteFileId;
         }
     }

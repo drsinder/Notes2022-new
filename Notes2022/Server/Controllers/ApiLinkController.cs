@@ -28,6 +28,9 @@ using Notes2022.Shared;
 
 namespace Notes2022.Server.Controllers
 {
+    /// <summary>
+    /// Model for creating a linked note
+    /// </summary>
     public class LinkCreateModel
     {
         public NoteHeader header { get; set; }
@@ -40,6 +43,9 @@ namespace Notes2022.Server.Controllers
         public string Secret { get; set; }
     }
 
+    /// <summary>
+    /// Model for editing a linked note
+    /// </summary>
     public class LinkCreateEModel
     {
         public NoteHeader header { get; set; }
@@ -54,6 +60,9 @@ namespace Notes2022.Server.Controllers
         public string Secret { get; set; }
     }
 
+    /// <summary>
+    /// Model for creating a linked response
+    /// </summary>
     public class LinkCreateRModel
     {
         public NoteHeader header { get; set; }
@@ -72,7 +81,6 @@ namespace Notes2022.Server.Controllers
     /// <summary>
     /// Has functions from former ApiLink, ApiLinkD, ApiLinkE Controllers
     /// </summary>
-
     [Route("api/[controller]")]
     [ApiController]
     public class ApiLinkController : ControllerBase
@@ -84,6 +92,11 @@ namespace Notes2022.Server.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Create a linked note
+        /// </summary>
+        /// <param name="inputModel"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<string> CreateLinkNote(LinkCreateModel inputModel)
         {
@@ -131,6 +144,11 @@ namespace Notes2022.Server.Controllers
             return "Ok";
         }
 
+        /// <summary>
+        /// EDit a linked note
+        /// </summary>
+        /// <param name="inputModel"></param>
+        /// <returns></returns>
         [HttpPut]
         public async Task<string> EditLinkResponse(LinkCreateEModel inputModel)
         {
@@ -175,6 +193,11 @@ namespace Notes2022.Server.Controllers
             return "Ok";
         }
 
+        /// <summary>
+        /// Delete a linked note
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <returns></returns>
         [HttpDelete]
         public async Task<string> DeleteLinkNote(string guid)
         {
@@ -211,7 +234,10 @@ namespace Notes2022.Server.Controllers
             return "Ok";
         }
 
-
+        /// <summary>
+        /// Remote test for system existence and alive...
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<string> Test()
         {

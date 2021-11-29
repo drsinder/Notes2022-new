@@ -48,12 +48,21 @@ namespace Notes2022.Server.Controllers
             _userManager = userManager;
         }
 
+        /// <summary>
+        /// Gets the list of links for files
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<List<LinkedFile>> Get()
         {
             return await _db.LinkedFile.ToListAsync();
         }
 
+        /// <summary>
+        /// Creates a link for a file
+        /// </summary>
+        /// <param name="linkedFile"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task Post(LinkedFile linkedFile)
         {
@@ -61,6 +70,11 @@ namespace Notes2022.Server.Controllers
             await _db.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Updates a link for a file
+        /// </summary>
+        /// <param name="linkedFile"></param>
+        /// <returns></returns>
         [HttpPut]
         public async Task Put(LinkedFile linkedFile)
         {
@@ -68,6 +82,11 @@ namespace Notes2022.Server.Controllers
             await _db.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Deletes a link for a file
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
         [HttpDelete]
         public async Task Delete(string Id)
         {

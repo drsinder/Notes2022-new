@@ -52,12 +52,18 @@ namespace Notes2022.Server.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+        /// <summary>
+        /// GET list of sequencers for user
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<List<Sequencer>> Get()
         {
+            // Who am I?
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             ApplicationUser me = await _userManager.FindByIdAsync(userId);
 
+            // My list
             List<Sequencer> mine = await _db.Sequencer.Where(p => p.UserId == me.Id).OrderBy(p => p.Ordinal).ThenBy(p => p.LastTime).ToListAsync();
 
             if (mine is null)
@@ -69,14 +75,20 @@ namespace Notes2022.Server.Controllers
             {
                 NoteAccess na = await AccessManager.GetAccess(_db, userId, m.NoteFileId, 0);
                 if (na.ReadAccess)
-                    avail.Add(m);
+                    avail.Add(m);   // ONLY if you have current read access!!
             }
             return avail.OrderBy(p => p.Ordinal).ToList();
         }
 
+        /// <summary>
+        /// Create a sequence item
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task Post(SCheckModel model)
         {
+            // Who am I?
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             ApplicationUser me = await _userManager.FindByIdAsync(userId);
 
@@ -92,7 +104,7 @@ namespace Notes2022.Server.Controllers
                 ord = mine[0].Ordinal + 1;
             }
 
-            Sequencer tracker = new Sequencer
+            Sequencer tracker = new Sequencer   // make a starting entry
             {
                 Active = true,
                 NoteFileId = model.fileId,
@@ -106,9 +118,15 @@ namespace Notes2022.Server.Controllers
             await _db.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Delete a sequencer item
+        /// </summary>
+        /// <param name="fileId"></param>
+        /// <returns></returns>
         [HttpDelete]
         public async Task Delete(int fileId)
         {
+            // Who am I?
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             ApplicationUser me = await _userManager.FindByIdAsync(userId);
             Sequencer mine = await _db.Sequencer.SingleOrDefaultAsync(p => p.UserId == me.Id && p.NoteFileId == fileId);
@@ -119,17 +137,23 @@ namespace Notes2022.Server.Controllers
             await _db.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Update Sequencer while sequencing
+        /// </summary>
+        /// <param name="seq"></param>
+        /// <returns></returns>
         [HttpPut]
         public async Task Put(Sequencer seq)
         {
+            // get a copy
             Sequencer modified = await _db.Sequencer.SingleAsync(p => p.UserId == seq.UserId && p.NoteFileId == seq.NoteFileId);
 
             modified.Active = seq.Active;
-            if (seq.Active)  // starting to seq
+            if (seq.Active)  // starting to seq - set start time
             {
                 modified.StartTime = DateTime.Now.ToUniversalTime();
             }
-            else
+            else            // end of a file - copy start time to LastTime so we do not miss notes
             {
                 modified.LastTime = seq.StartTime;
             }

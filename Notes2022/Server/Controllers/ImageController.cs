@@ -13,7 +13,10 @@ namespace Notes2022.Server.Controllers
         {
             this.hostingEnv = env;
         }
-
+        /// <summary>
+        /// Used by the Syncfusion text editor to store an image file
+        /// </summary>
+        /// <param name="UploadFiles"></param>
         [HttpPost("[action]")]
         [Route("api/Image/Save")]
         public void Save(IList<IFormFile> UploadFiles)
