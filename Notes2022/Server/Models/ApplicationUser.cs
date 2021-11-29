@@ -5,6 +5,15 @@ namespace Notes2022.Server.Models
 {
     /// <summary>
     /// Extentions to the base IdentityUser
+    /// 
+    /// Contains fields mirrored locally in UserData
+    /// 
+    /// These fields are accessed and edited there and then written back
+    /// enmass.  By contrast the predefined field not seen here are
+    /// almost always accessed via methods.  These methods create a Validation 
+    /// Stamp for the predefined fields.  Tinker with those directly and
+    /// you will probably make the user "Unusable".
+    /// 
     /// </summary>
     public class ApplicationUser : IdentityUser
     {

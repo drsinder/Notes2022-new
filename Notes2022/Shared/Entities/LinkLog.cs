@@ -30,6 +30,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Notes2022.Shared
 {
+    /// <summary>
+    /// This class defines a table in the database.
+    /// 
+    /// Log of link activity.
+    /// 
+    /// </summary>
     public class LinkLog
     {
         [Required]

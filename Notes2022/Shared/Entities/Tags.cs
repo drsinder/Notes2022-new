@@ -29,6 +29,13 @@ using System.Runtime.Serialization;
 
 namespace Notes2022.Shared
 {
+    /// <summary>
+    /// This class defines a table in the database.
+    /// 
+    /// Zero or more of these objects may be associated with each note.
+    /// Defines a simple tag or set of tags for a note.
+    /// 
+    /// </summary>
     [DataContract]
     public class Tags
     {

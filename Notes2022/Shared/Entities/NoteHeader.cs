@@ -30,6 +30,41 @@ using System.Runtime.Serialization;
 
 namespace Notes2022.Shared
 {
+    /// <summary>
+    /// This class defines a table in the database.
+    /// NoteHeader objects are the high level descriptors for a note.
+    /// They contain all the information about a note EXCEPT the
+    /// body, which is contained in related class NoteContent.
+    /// 
+    /// The client index gets the complete set for a given notfile.
+    /// This enables quick display, manipulation, and searching of
+    /// the index.  Each object is related to one file object.
+    /// 
+    /// Fields:
+    /// 
+    /// Id          - The 64 bit unique Identifier for the note.
+    /// NoteFileId  - The file which the note is a part of.
+    /// ArchiveId   - 0 for the main file. Positive for archived notes.
+    ///                 An Archive is a kind of subfile.
+    /// BaseNoteId  - 0 for base notes. For responses the Id of its parent.
+    /// NoteOrdinal - The number that appears in the index to Id a Base note.
+    /// ResponseOrdinal - The number of a response. 0 for a base note.
+    /// NoteSubject - You guessed it!
+    /// LastEdited  - When the note was last edited
+    /// ThreadLastEdited - When any note in a string was edited
+    /// CreateDate  - DateTime when note was created
+    /// ResponseCount - Only non-zero for a base note
+    /// AuthorID    - UserId of the author
+    /// AuthorName  - friendly name of author
+    /// LinkGuid    - used to tie link notes together
+    /// RefId       - Id of Note user was viewing when they responded
+    /// IsDeleted   - true if the note has been marked as deleted
+    /// Version     - Version Id for edited notes. Current is 0. Older are +
+    /// DirectorMessage - Text message that may head a note.
+    /// 
+    /// A single NoteContent is associated with each NoteHeader.
+    /// 
+    /// </summary>
     [DataContract]
     public class NoteHeader
     {

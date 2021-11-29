@@ -38,6 +38,11 @@ namespace Notes2022.Shared
         Delete
     };
 
+    /// <summary>
+    /// This class defines a table in the database.
+    /// 
+    /// Used to que up items to be linked to remote system.
+    /// </summary>
     public class LinkQueue
     {
         [Required]

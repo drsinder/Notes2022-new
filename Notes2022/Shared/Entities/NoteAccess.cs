@@ -30,6 +30,23 @@ using System.Runtime.Serialization;
 
 namespace Notes2022.Shared
 {
+    /// <summary>
+    /// This class defines a table in the database.
+    /// 
+    /// Objects of this class are Access Tokens for a file.
+    /// 
+    /// There are a minimum of two for each file:
+    /// 1 for the file Owner.
+    /// 1 for the unknown "Other" user - if an entry is not
+    ///     found for a user, this is the fallback.
+    ///     
+    /// There COULD be one for each user.  But the Other entry is
+    /// usually used for public file and so not too many other entries
+    /// are needed.
+    ///     
+    /// The fields should be self evident.
+    /// 
+    /// </summary>
     [DataContract]
     public class NoteAccess
     {

@@ -29,6 +29,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Notes2022.Shared
 {
+    /// <summary>
+    /// This class defines a table in the database.
+    /// 
+    /// Not currently in use.
+    /// 
+    /// </summary>
     public class SQLFile
     {
         [Required]
@@ -56,8 +62,15 @@ namespace Notes2022.Shared
 
     }
 
+    /// <summary>
+    /// This class defines a table in the database.
+    /// 
+    /// Not currently in use.
+    /// 
+    /// </summary>
     public class SQLFileContent
     {
+
         [Key]
         public long SQLFileId { get; set; }
 

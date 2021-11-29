@@ -30,6 +30,13 @@ using System.Runtime.Serialization;
 
 namespace Notes2022.Shared
 {
+    /// <summary>
+    /// This class does NOT define a table in the database!
+    /// 
+    /// It is a local mirror of the extra data fields added to the
+    /// ApplicationUser.
+    /// 
+    /// </summary>
     [DataContract]
     public class UserData
     {

@@ -30,6 +30,14 @@ using System.Runtime.Serialization;
 
 namespace Notes2022.Shared
 {
+    /// <summary>
+    /// This class defines a table in the database.
+    /// 
+    /// It is used to link a file to a file on a remote system
+    /// such that notes written on one system will be transmitted
+    /// to the other.
+    /// 
+    /// </summary>
     [DataContract]
     public class LinkedFile
     {

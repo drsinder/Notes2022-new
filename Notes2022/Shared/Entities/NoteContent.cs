@@ -29,6 +29,12 @@ using System.Runtime.Serialization;
 
 namespace Notes2022.Shared
 {
+    /// <summary>
+    /// This class defines a table in the database.
+    /// Each NoteContent object is associated with one NoteHeader
+    /// It contains the "Body" of the note.
+    /// 
+    /// </summary>
     [DataContract]
     public class NoteContent
     {

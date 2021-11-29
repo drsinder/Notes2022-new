@@ -30,6 +30,14 @@ using System.Runtime.Serialization;
 
 namespace Notes2022.Shared
 {
+    /// <summary>
+    /// This class defines a table in the database.
+    /// 
+    /// Object of this class may be associated with a user
+    /// and file to be used to find notes written since the
+    /// "Recent" function was last invoked.
+    /// 
+    /// </summary>
     [DataContract]
     public class Sequencer
     {

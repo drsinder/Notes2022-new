@@ -30,6 +30,13 @@ using System.Runtime.Serialization;
 
 namespace Notes2022.Shared
 {
+    /// <summary>
+    /// This class defines a table in the database.
+    /// 
+    /// Used to associate a user and a file for the purpose of
+    /// forwarding an email when new notes are written.
+    /// 
+    /// </summary>
     [DataContract]
     public class Subscription
     {

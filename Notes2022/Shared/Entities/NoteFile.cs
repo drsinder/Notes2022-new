@@ -30,6 +30,34 @@ using System.Runtime.Serialization;
 
 namespace Notes2022.Shared
 {
+    /// <summary>
+    /// This class defines a table in the database.
+    /// Objects of this class serve as the highest level
+    /// of the hierarchy of the system.  Notes are
+    /// thought the be contained in a file, but are
+    /// in fact are related to it.  Classes directly
+    /// related the a File:
+    /// 
+    /// NoteAccess - Access tokens
+    /// NoteHeader - descriptor for a note
+    ///   |-- NoteContent - via a relation to NoteHeader
+    ///   |-- Tags - via direct relation and via NoteHeader
+    /// Subscription - a way to get email for new notes
+    /// Sequencer  - a way to keep track of recent notes
+    /// Mark       - a way to mark notes for later output
+    /// 
+    /// See each of these for more detail.
+    /// 
+    /// NoteFiles have a unique integer Id
+    /// NoteFiles have a File Name and a File Title
+    /// The File Naame is case sensitive.
+    /// They are owned by their creator, an Admin.
+    /// They also have a count of the number of archives they
+    /// have and a LastEdited DateTime
+    /// 
+    /// Files can be found by name or Id.
+    /// 
+    /// </summary>
     [DataContract]
     public class NoteFile
     {
