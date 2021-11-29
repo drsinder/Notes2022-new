@@ -83,3 +83,12 @@ From the Admin menu item choose NoteFiles.  Then add a few note files to work wi
 Write some notes!
 
 
+### Solution organization
+The Solution has 4 projects (and a Preview that should remain unloaded for now).
+
+- Notes2022.Shared : Contains common elements used by other projects.  Defines Db Tables and a DAL for access to the data.
+- Notes2022.RCL    : A Razor Component Library.  Almost all of the client side function resides here as components.  No @page s.
+- Notes2022.Client : Very small.  Mostly just pages that contain components from the RCL.
+- Notes2022.Server : Direct access to Db and provides data and operations to RCL through the DAL.
+- (Notes2022Preview) : An experimental MAUI client.  Currently broken.  Authentication needed.
+
