@@ -12,6 +12,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{60F22E01-D413-4BB7-ACBA-3F3939D0FB2F}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		Notes2022.Client.MD = Notes2022.Client.MD
+		Notes2022.RCL.MD = Notes2022.RCL.MD
+		Notes2022.Server.MD = Notes2022.Server.MD
+		Notes2022.Shared.MD = Notes2022.Shared.MD
 		README.md = README.md
 	EndProjectSection
 EndProject

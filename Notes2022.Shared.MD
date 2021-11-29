@@ -45,5 +45,5 @@ Also contained in NotesModels is a Data Access Layer (DAL.cs) which provides enc
     /// 
     /// Sometimes the communication with the server is through non-database
     /// classes.  These are found in the NotesMoels folder in this project.
-    /// See the classes or the InternalModels.cd file for a summary.
+    /// See the classes or the InternalModels.cd file for a summary. 
 
