@@ -35,6 +35,7 @@
     <Compile Remove="Controllers\PreviousNoteController.cs" />
     <Compile Remove="Controllers\WeatherForecastController.cs" />
     <Compile Remove="Data\ApplicationDbContext.cs" />
+    <Compile Remove="Manager\LocalManager.cs" />
     <Compile Remove="Programxx.cs" />
     <Compile Remove="Services\INotes2022Service.cs" />
     <Compile Remove="Services\Notes2022Service.cs" />
