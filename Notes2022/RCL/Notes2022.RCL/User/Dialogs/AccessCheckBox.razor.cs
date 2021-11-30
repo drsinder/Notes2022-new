@@ -4,11 +4,21 @@ using System.Net.Http.Json;
 
 namespace Notes2022.RCL.User.Dialogs
 {
+    /// <summary>
+    /// Encapsulates a single checkbox for access editor
+    /// </summary>
     public partial class AccessCheckBox
     {
+        /// <summary>
+        /// The item and its full toekn
+        /// </summary>
         [Parameter]
         public AccessItem Model { get; set; }
 
+        /// <summary>
+        /// Invert checked state and update
+        /// </summary>
+        /// <returns></returns>
         protected async Task OnClick()
         {
             Model.isChecked = !Model.isChecked;

@@ -30,17 +30,46 @@ using Notes2022.RCL.User.Dialogs;
 using Notes2022.Shared;
 using Syncfusion.Blazor.Navigations;
 using System.Net.Http.Json;
+using System.Timers;
 
 namespace Notes2022.RCL.User.Menus
 {
+    /// <summary>
+    /// Displays the top of page navigation bar
+    /// </summary>
     public partial class NavMenu
     {
+        /// <summary>
+        /// For display of error message during initialization
+        /// </summary>
         [CascadingParameter] public IModalService Modal { get; set; }
 
         [Parameter] public bool IsPreview { get; set; } = false;
 
+        /// <summary>
+        /// The list of menu bar items (structure of the menu)
+        /// </summary>
         protected static List<MenuItem> menuItemsTop { get; set; }
+
+        /// <summary>
+        /// Root menu item
+        /// </summary>
         protected SfMenu<MenuItem> topMenu { get; set; }
+
+        /// <summary>
+        /// Current time
+        /// </summary>
+        private string mytime { get; set; }
+
+        /// <summary>
+        /// Used to compare time and abort re-render in same minute
+        /// </summary>
+        private string mytime2 { get; set; } = "";
+        
+        /// <summary>
+        /// Used to update menu bar time - tick once per second
+        /// </summary>
+        private System.Timers.Timer timer2 { get; set; }
 
         private bool collapseNavMenu = true;
 
@@ -59,6 +88,34 @@ namespace Notes2022.RCL.User.Menus
             collapseNavMenu = !collapseNavMenu;
         }
 
+        /// <summary>
+        /// Update the clock once per second
+        /// </summary>
+        /// <param name="firstRender"></param>
+        protected override void OnAfterRender(bool firstRender)
+        {
+            if (firstRender)
+            {
+                timer2 = new System.Timers.Timer(1000);
+                timer2.Elapsed += TimerTick2;
+                timer2.Enabled = true;
+            }
+        }
+
+        /// <summary>
+        /// Invoked once per second
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="e"></param>
+        protected void TimerTick2(Object source, ElapsedEventArgs e)
+        {
+            mytime = DateTime.Now.ToShortTimeString();
+            if (mytime != mytime2) // do we need to re-render?
+            {
+                StateHasChanged();
+                mytime2 = mytime;
+            }
+        }
 
         protected override async Task OnParametersSetAsync()
         {
@@ -83,24 +140,19 @@ namespace Notes2022.RCL.User.Menus
             {
                 try
                 {
-                    // session...
-
-                    //Globals.EditUserVModel = await sessionStorage.GetItemAsync<EditUserViewModel>("EditUserView");
-
-                    if (Globals.EditUserVModel is null)
+                    if (Globals.EditUserVModel is null) // do we alreay have user Info?
                     {
+                        // NO - get it.
                         UserData udata = await DAL.GetUserData(Http);
                         string uid = udata.UserId;
                         Globals.UserData = udata;
-
                         Globals.EditUserVModel = await DAL.GetUserEdit(Http, uid);
-                        //await sessionStorage.SetItemAsync("EditUserView", Globals.EditUserVModel);
-
                     }
 
-                    if (Globals.RolesValid)
-                        goto Found;
+                    if (Globals.RolesValid) // have we set roles already?
+                        goto Found;         // yes
 
+                    // Set user roles
                     foreach (CheckedUser u in Globals.EditUserVModel.RolesList)
                     {
                         if (u.theRole.NormalizedName == "ADMIN" && u.isMember)
@@ -125,11 +177,11 @@ namespace Notes2022.RCL.User.Menus
                 {
                     ShowMessage("In NavMenu: " + e.Message);
                 }
-
             }
 
             IsPreview:
 
+            // make the whole menu
             menuItemsTop = new List<MenuItem>();
             MenuItem item;
 
@@ -163,15 +215,13 @@ namespace Notes2022.RCL.User.Menus
                 new () { Id = "Hangfire", Text = "Hangfire" }
             };
 
-
             menuItemsTop.Add(item);
 
-
+            // remove what does not apply to this user
             if (!isAdmin)
             {
                 menuItemsTop.RemoveAt(3);
             }
-
             if (isUser || isAdmin)
             {
             }
@@ -180,14 +230,23 @@ namespace Notes2022.RCL.User.Menus
                 menuItemsTop.RemoveAt(1);
                 menuItemsTop.RemoveAt(0);
             }
-
         }
 
+        /// <summary>
+        /// Invoked when an Item is selected
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns></returns>
         public async Task OnSelect(MenuEventArgs<MenuItem> e)
         {
             await ExecMenu(e.Item.Id);
         }
 
+        /// <summary>
+        /// This could potentially be called from other places...
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         private async Task ExecMenu(string id)
         {
             switch (id)
@@ -236,21 +295,33 @@ namespace Notes2022.RCL.User.Menus
             }
         }
 
+        /// <summary>
+        /// Recent menu item - start sequencing
+        /// </summary>
+        /// <returns></returns>
         private async Task StartSeq()
         {
+            // get users list of files
             List<Sequencer> sequencers = await DAL.GetSequencer(Http);
             if (sequencers.Count == 0)
                 return;
 
-            sequencers = sequencers.OrderBy(p => p.NoteFileId).ToList();
+            // order them as prefered by user
+            sequencers = sequencers.OrderBy(p => p.Ordinal).ToList();
 
+            // set up state for sequencing
             await sessionStorage.SetItemAsync<List<Sequencer>>("SeqList", sequencers);
             await sessionStorage.SetItemAsync<int>("SeqIndex", 0);
             await sessionStorage.SetItemAsync<Sequencer>("SeqItem", sequencers[0]);
-            await sessionStorage.SetItemAsync<bool>("IsSeq", true);
+            await sessionStorage.SetItemAsync<bool>("IsSeq", true); // flag for noteindex
+            // begin
             Navigation.NavigateTo("noteindex/" + sequencers[0].NoteFileId);
         }
 
+        /// <summary>
+        /// Show error message
+        /// </summary>
+        /// <param name="message"></param>
         private void ShowMessage(string message)
         {
             var parameters = new ModalParameters();

@@ -66,15 +66,14 @@
         Copyright &copy; 2022 Dale Sinder
     </div>
 
-
-
-
-@*@inject GrpcChannel Channel
-*@
 @code {
     private Notes2022.Shared.AboutModel model { get; set; }
     private TimeSpan upTime { get; set; }
 
+    /// <summary>
+    /// Get some simple stuff from server
+    /// </summary>
+    /// <returns></returns>
     protected override async Task OnInitializedAsync()
     {
         try

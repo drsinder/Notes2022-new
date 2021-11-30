@@ -7,14 +7,14 @@ using System.Timers;
 
 namespace Notes2022.RCL.User.Dialogs
 {
+    /// <summary>
+    /// Add a user to the access list
+    /// </summary>
     public partial class AddAccessDlg
     {
         [CascadingParameter] public BlazoredModalInstance ModalInstance { get; set; }
         [Parameter] public List<UserData> userList { get; set; }
         [Parameter] public int NoteFileId { get; set; }
-
-        protected int fileId { get; set; }
-
 
         protected string selectedUserId { get; set; }
 
@@ -55,9 +55,9 @@ namespace Notes2022.RCL.User.Dialogs
 
                 await DAL.CreateAccessItem(Http, item);
 
-                delay = new(250);
+                delay = new(250);       // allow time for server to respond
                 delay.Enabled = true;
-                delay.Elapsed += Done;      // TODO why is this here??
+                delay.Elapsed += Done;  // then close the dialog automatically
 
                 return;
             }

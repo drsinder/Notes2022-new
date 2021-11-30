@@ -33,18 +33,48 @@ using System.Net.Http.Json;
 
 namespace Notes2022.RCL.User.Panels
 {
+    /// <summary>
+    /// Editor for notes
+    /// Has a fields for:
+    /// Subject, Tags, Director Message, and the Note Body
+    /// </summary>
     public partial class NoteEditor
     {
+        /// <summary>
+        /// For dialogs
+        /// </summary>
         [CascadingParameter] public IModalService Modal { get; set; }
+
+        /// <summary>
+        /// The data model used
+        /// </summary>
         [Parameter] public TextViewModel Model { get; set; }
 
         private bool ShowChild = false;
+
+        /// <summary>
+        /// The Notefile we are using
+        /// </summary>
         private NoteFile noteFile { get; set; } = new NoteFile();
+
+        /// <summary>
+        /// Reference to the Body Editor
+        /// </summary>
         private SfRichTextEditor EditObj { get; set; }
+
+        /// <summary>
+        /// Reference to the Editor Tool bar
+        /// </summary>
         private RichTextEditorToolbarSettings ToolBarObj { get; set; }
 
+        /// <summary>
+        /// Holding place to prepared code to be inserted
+        /// </summary>
         protected string PreparedCode { get; set; }
 
+        /// <summary>
+        /// Define the content of the toolbar
+        /// </summary>
         private List<ToolbarItemModel> Tools = new List<ToolbarItemModel>()
         {
             new ToolbarItemModel() { Command = ToolbarCommand.Undo },
@@ -87,12 +117,20 @@ namespace Notes2022.RCL.User.Panels
         {
         }
 
+        /// <summary>
+        /// Get a NoteFile Object for the file we are using
+        /// </summary>
+        /// <returns></returns>
         protected async override Task OnParametersSetAsync()
         {
             if (Model.NoteFileID != 0)
                 noteFile = await DAL.GetNewNote(Http, Model.NoteFileID);
         }
 
+        /// <summary>
+        /// User has asked to store the note
+        /// </summary>
+        /// <returns></returns>
         protected async Task HandleValidSubmit()
         {
             if (string.IsNullOrEmpty(Model.MySubject))
@@ -100,22 +138,19 @@ namespace Notes2022.RCL.User.Panels
                 ShowMessage("Please provide a note Subject");
                 return;
             }
-            //Model.MySubject = "*none*";  // must have title
 
             if (Model.NoteID == 0)    // new note
             {
                 await DAL.CreateNewNote(Http, Model);
-                NoteHeader nh = await DAL.GetNewNote2(Http);
-                Navigation.NavigateTo("notedisplay/" + nh.Id);
-                return;
             }
             else // editing
             {
                 await DAL.UpdateNote(Http, Model);
-                NoteHeader nh = await DAL.GetNewNote2(Http);
-                Navigation.NavigateTo("notedisplay/" + nh.Id);
-                return;
             }
+            NoteHeader nh2 = await DAL.GetNewNote2(Http);
+            Navigation.NavigateTo("notedisplay/" + nh2.Id);
+            return;
+
         }
 
         //public async Task OnToolbarClickHandler(ToolbarClickEventArgs args)
@@ -142,6 +177,10 @@ namespace Notes2022.RCL.User.Panels
         //    }
         //}
 
+        /// <summary>
+        /// Prepare code for insertion - collect the text
+        /// </summary>
+        /// <returns></returns>
         public async Task InsertCode1()
         {
             string xx = await EditObj.GetSelectedHtmlAsync();
@@ -163,12 +202,20 @@ namespace Notes2022.RCL.User.Panels
             }
         }
 
+        /// <summary>
+        /// Insert the previously prepared code.
+        /// </summary>
+        /// <returns></returns>
         public async Task InsertCode2()
         {
             if (!string.IsNullOrEmpty(PreparedCode))
                 await EditObj.ExecuteCommandAsync(CommandName.InsertHTML, PreparedCode);
         }
 
+        /// <summary>
+        /// Shows a message
+        /// </summary>
+        /// <param name="message"></param>
         private void ShowMessage(string message)
         {
             var parameters = new ModalParameters();
@@ -176,19 +223,22 @@ namespace Notes2022.RCL.User.Panels
             Modal.Show<MessageBox>("", parameters);
         }
 
+        /// <summary>
+        /// Cancel out of editing
+        /// </summary>
         protected void CancelEdit()
         {
             Navigation.NavigateTo("noteindex/" + Model.NoteFileID);
         }
 
-        protected void OnClickRef(MouseEventArgs args)
-        {
-            ShowChild = true;
-        }
+        //protected void OnClickRef(MouseEventArgs args)
+        //{
+        //    ShowChild = true;
+        //}
 
-        private void OnClickRefHide(MouseEventArgs args)
-        {
-            ShowChild = false;
-        }
+        //private void OnClickRefHide(MouseEventArgs args)
+        //{
+        //    ShowChild = false;
+        //}
     }
 }

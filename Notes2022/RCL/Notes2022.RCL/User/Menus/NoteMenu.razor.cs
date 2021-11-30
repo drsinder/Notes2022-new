@@ -32,25 +32,49 @@ using System.Net.Http.Json;
 
 namespace Notes2022.RCL.User.Menus
 {
+    /// <summary>
+    /// Menu for top of a Note
+    /// </summary>
     public partial class NoteMenu
     {
+        /// <summary>
+        /// For dialogs
+        /// </summary>
         [CascadingParameter] public IModalService Modal { get; set; }
+
+        /// <summary>
+        /// Model data reference from container
+        /// </summary>
         [Parameter] public DisplayModel Model { get; set; }
+
+        /// <summary>
+        /// Reference to our caller/container so we can call back into it.
+        /// </summary>
         [Parameter] public NoteIndex MyNoteIndex { get; set; }
 
+        /// <summary>
+        /// Menu structure
+        /// </summary>
         private static List<MenuItem> menuItems { get; set; }
+
+        /// <summary>
+        /// Top level menu instance
+        /// </summary>
         protected SfMenu<MenuItem> topMenu { get; set; }
 
         private bool HamburgerMode { get; set; } = false;
 
         [Inject] HttpClient Http { get; set; }
         [Inject] NavigationManager Navigation { get; set; }
-
         public NoteMenu()
         {
         }
 
-        protected override Task OnInitializedAsync()
+        /// <summary>
+        /// Construct our menu based on user access token
+        /// </summary>
+        /// <returns></returns>
+        protected override Task OnParametersSetAsync()
         {
             menuItems = new List<MenuItem>();
 
@@ -108,11 +132,22 @@ namespace Notes2022.RCL.User.Menus
             return Task.CompletedTask;
         }
 
+        /// <summary>
+        /// Menu item invoked
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns></returns>
         public async Task OnSelect(MenuEventArgs<MenuItem> e)
         {
             await ExecMenu(e.Item.Id);
         }
 
+        /// <summary>
+        /// This can be called not only from above but also by the container
+        /// that shares the same model
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task ExecMenu(string id)
         {
             long myId;
@@ -214,6 +249,9 @@ namespace Notes2022.RCL.User.Menus
             }
         }
 
+        /// <summary>
+        /// Forwards a note
+        /// </summary>
         protected void Forward()
         {
             var parameters = new ModalParameters();
@@ -233,6 +271,13 @@ namespace Notes2022.RCL.User.Menus
             Modal.Show<Forward>("", parameters);
         }
 
+        /// <summary>
+        /// Exports a note
+        /// </summary>
+        /// <param name="isHtml"></param>
+        /// <param name="isCollapsible"></param>
+        /// <param name="isEmail"></param>
+        /// <param name="emailaddr"></param>
         private void DoExport(bool isHtml, bool isCollapsible, bool isEmail = false, string emailaddr = null)
         {
             var parameters = new ModalParameters();
@@ -252,6 +297,10 @@ namespace Notes2022.RCL.User.Menus
             Modal.Show<ExportUtil1>("", parameters);
         }
 
+        /// <summary>
+        /// Emails a note
+        /// </summary>
+        /// <returns></returns>
         private async Task DoEmail()
         {
             string emailaddr;
@@ -268,6 +317,11 @@ namespace Notes2022.RCL.User.Menus
 
         }
 
+        /// <summary>
+        /// Confirmation dialog
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
         private async Task<bool> YesNo(string message)
         {
             var parameters = new ModalParameters();

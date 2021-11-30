@@ -31,33 +31,74 @@ using System.Text;
 
 namespace Notes2022.RCL.User.Menus
 {
+    /// <summary>
+    /// Menu at top of noteindex listing
+    /// </summary>
     public partial class ListMenu
     {
+        /// <summary>
+        ///  for showing dialogs
+        /// </summary>
         [CascadingParameter] public IModalService Modal { get; set; }
+
+        /// <summary>
+        /// reference to data model for index display
+        /// </summary>
         [Parameter] public NoteDisplayIndexModel Model { get; set; }
 
+        /// <summary>
+        /// reference to the caller/container
+        /// </summary>
         [Parameter] public NoteIndex Caller { get; set; }
 
+        /// <summary>
+        /// Menu items/structure
+        /// </summary>
         private static List<MenuItem> menuItems { get; set; }
+
+        /// <summary>
+        /// Top menu item instance
+        /// </summary>
         protected SfMenu<MenuItem> topMenu { get; set; }
 
         private bool HamburgerMode { get; set; } = false;
 
+        /// <summary>
+        /// Are we printing?
+        /// </summary>
         private bool IsPrinting { get; set; } = false;
+
+        /// <summary>
+        /// Text value for slider while doing background processing
+        /// </summary>
         protected string sliderValueText { get; set; }
+
+        /// <summary>
+        /// Number of base notes we have
+        /// </summary>
         protected int baseNotes { get; set; }
+
+        /// <summary>
+        /// Ordinal of the current note
+        /// </summary>
         protected int currNote { get; set; }
 
         [Inject] HttpClient Http { get; set; }
         [Inject] NavigationManager Navigation { get; set; }
-        public ListMenu()
+        public ListMenu()   // needed for injection above...
         {
         }
 
+        /// <summary>
+        /// Initializations
+        /// </summary>
+        /// <returns></returns>
         protected override async Task OnParametersSetAsync()
         {
             baseNotes = Model.Notes.Count;
             sliderValueText = "1/" + baseNotes;
+
+            // construct the menu based on user access
             menuItems = new List<MenuItem>();
 
             MenuItem item = new() { Id = "ListNoteFiles", Text = "List Note Files" };
@@ -96,15 +137,23 @@ namespace Notes2022.RCL.User.Menus
                     menuItems.Add(new MenuItem() { Id = "AccessControls", Text = "Access Controls" });
                 }
             }
-
-            //Width = await jsRuntime.InvokeAsync<int>("getWidth", "x");
         }
 
-        public async Task OnSelect(MenuEventArgs<MenuItem> e)
+        /// <summary>
+        /// When a Menu item is selected
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        private async Task OnSelect(MenuEventArgs<MenuItem> e)
         {
             await ExecMenu(e.Item.Id);
         }
 
+        /// <summary>
+        /// The container has a refernce to "this" and can call this method...
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task ExecMenu(string id)
         {
             switch (id)
@@ -161,10 +210,13 @@ namespace Notes2022.RCL.User.Menus
 
                 default:
                     break;
-
             }
         }
 
+        /// <summary>
+        /// Display Search dialog in prep for a search
+        /// </summary>
+        /// <returns></returns>
         private async Task SetSearch()
         {
             var parameters = new ModalParameters();
@@ -176,12 +228,16 @@ namespace Notes2022.RCL.User.Menus
             else
             {
                 Search target = (Search)result.Data;
-                // start the search
+                // start the search - call contrainer method
                 await Caller.StartSearch(target);
                 return;
             }
         }
 
+        /// <summary>
+        /// Print file set up
+        /// </summary>
+        /// <returns></returns>
         private async Task PrintFile()
         {
             currNote = 1;
@@ -191,7 +247,7 @@ namespace Notes2022.RCL.User.Menus
         }
 
         /// <summary>
-        /// Print a whole file
+        /// Print the whole file
         /// </summary>
         protected async Task PrintFile2()
         {
@@ -269,10 +325,17 @@ namespace Notes2022.RCL.User.Menus
 
             var parameters = new ModalParameters();
             parameters.Add("PrintStuff", stuff);    // pass string to print dialog
-            Modal.Show<PrintDlg>("", parameters);   // invloke print dialog with our output
+            Modal.Show<PrintDlg>("", parameters);   // invoke print dialog with our output
 
         }
 
+        /// <summary>
+        /// Export a file
+        /// </summary>
+        /// <param name="isHtml">true if in html format - else text </param>
+        /// <param name="isCollapsible">collapsible/expandable html?</param>
+        /// <param name="isEmail">Should we mail it?</param>
+        /// <param name="emailaddr">Where to mail it</param>
         private void DoExport(bool isHtml, bool isCollapsible, bool isEmail = false, string emailaddr = null)
         {
             var parameters = new ModalParameters();
@@ -292,6 +355,9 @@ namespace Notes2022.RCL.User.Menus
             Modal.Show<ExportUtil1>("", parameters);
         }
 
+        /// <summary>
+        /// Prepare Json output
+        /// </summary>
         private void DoJson()
         {
             var parameters = new ModalParameters();
@@ -319,19 +385,13 @@ namespace Notes2022.RCL.User.Menus
                 return;
 
             DoExport(true, true, true, emailaddr);
-
-
-
-            //            ShowMessage(emailaddr);
-
         }
 
-
-        private void ShowMessage(string message)
-        {
-            var parameters = new ModalParameters();
-            parameters.Add("MessageInput", message);
-            Modal.Show<MessageBox>("", parameters);
-        }
+        //private void ShowMessage(string message)
+        //{
+        //    var parameters = new ModalParameters();
+        //    parameters.Add("MessageInput", message);
+        //    Modal.Show<MessageBox>("", parameters);
+        //}
     }
 }

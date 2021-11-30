@@ -27,17 +27,27 @@ using System.Net.Http.Json;
 
 namespace Notes2022.RCL.User
 {
+    /// <summary>
+    /// Display list of notefiles
+    /// </summary>
     public partial class NotesFiles
     {
         private List<NoteFile> Files { get; set; }
 
         private UserData UserData { get; set; }
 
+        /// <summary>
+        /// Set up and get data from server
+        /// </summary>
+        /// <returns></returns>
         protected override async Task OnParametersSetAsync()
         {
             await sessionStorage.SetItemAsync("ArcId", 0);
             await sessionStorage.SetItemAsync("IndexPage", 1);
+
+            // grab data from server
             HomePageModel model = await DAL.GetHomePageData(Http);
+
             Files = model.NoteFiles;
             UserData = model.UserData;
             if (UserData.Ipref2 == 0)

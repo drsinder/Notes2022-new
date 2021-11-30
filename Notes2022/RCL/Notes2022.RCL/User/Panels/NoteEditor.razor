@@ -32,7 +32,9 @@ else
 {
     if (ShowChild && Model.RefId != 0)
     {
+        @* if references are available make option to show visible *@
         <span>Show References </span><SfSwitch @bind-Checked="ShowChild" TChecked="bool"></SfSwitch>
+        @* This panel may show itself recursively to show all refrences *@
         <NotePanel NoteId="Model.RefId" ShowChild="true" IsRootNote="false" ShowButtons="false"></NotePanel>
         <hr />
     }

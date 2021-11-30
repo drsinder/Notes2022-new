@@ -35,30 +35,91 @@ using SearchOption = Notes2022.Shared.SearchOption;
 
 namespace Notes2022.RCL.User
 {
+    /// <summary>
+    /// Index/Listing for a NoteFile.  Has an embeded NotePanel that can be
+    /// displayed in place of the index when the user selects a note to view.
+    /// </summary>
     public partial class NoteIndex
     {
+        /// <summary>
+        /// For dialogs
+        /// </summary>
         [CascadingParameter] public IModalService Modal { get; set; }
+
+        /// <summary>
+        /// The NoteFileId we are using
+        /// </summary>
         [Parameter] public int NotesfileId { get; set; }
+
+        /// <summary>
+        /// Non zero when viewing a note
+        /// </summary>
         [Parameter] public long CurrentNoteId { get; set; }
 
+        /// <summary>
+        /// Reference to the menu so we can talk to it.
+        /// </summary>
         protected ListMenu MyMenu { get; set; }
 
+        /// <summary>
+        /// Accumulator for the navigation string
+        /// </summary>
         public string NavString { get; set; }
 
+        /// <summary>
+        /// Our direct navigation typin box
+        /// </summary>
         protected SfTextBox sfTextBox { get; set; }
 
+        /// <summary>
+        /// Our index grid
+        /// </summary>
         protected SfGrid<NoteHeader> sfGrid1 { get; set; }
+
+        /// <summary>
+        /// Filter setting for the grid
+        /// </summary>
         protected GridFilterSettings FilterSettings { get; set; }
+
+        /// <summary>
+        /// Page settings for the grid
+        /// </summary>
         protected GridPageSettings PageSettings { get; set; }
 
+        /// <summary>
+        /// Grid page size
+        /// </summary>
         protected int PageSize { get; set; }
+
+        /// <summary>
+        /// Current page of grid
+        /// </summary>
         protected int CurPage { get; set; }
 
+        /// <summary>
+        /// Should note body be shown?
+        /// </summary>
         protected bool ShowContent { get; set; }
+
+        /// <summary>
+        /// Should resopnse body be shown?
+        /// </summary>
         protected bool ShowContentR { get; set; }
+
+        /// <summary>
+        /// If the grid expanded fully expanded
+        /// </summary>
         protected bool ExpandAll { get; set; }
 
+        /// <summary>
+        /// Are we sequencing?
+        /// </summary>
         protected bool IsSeq { get; set; }
+
+        /// <summary>
+        /// Model for the index data
+        /// </summary>
+        public NoteDisplayIndexModel Model { get; set; }
 
         [Inject] HttpClient Http { get; set; }
         [Inject] NavigationManager Navigation { get; set; }
@@ -67,8 +128,10 @@ namespace Notes2022.RCL.User
         {
         }
 
-        public NoteDisplayIndexModel Model { get; set; }
-
+        /// <summary>
+        /// Set up and get data
+        /// </summary>
+        /// <returns></returns>
         protected override async Task OnParametersSetAsync()
         {
             await sessionStorage.SetItemAsync<bool>("InSearch", false);
@@ -81,35 +144,54 @@ namespace Notes2022.RCL.User
                 NotesfileId = -NotesfileId;
             }
 
+            // Get the notefile data
             Model = await DAL.GetNoteIndex(Http, NotesfileId);
+            // Set preferences for user
             PageSize = Model.UserData.Ipref2;
             ShowContent = Model.UserData.Pref7;
             ExpandAll = Model.UserData.Pref3;
 
+            // restore page
             CurPage = await sessionStorage.GetItemAsync<int>("IndexPage");
 
             if (IsSeq)
                 await StartSeq();
         }
 
+        /// <summary>
+        /// Note selected for display
+        /// </summary>
+        /// <param name="args"></param>
         protected void DisplayIt(RowSelectEventArgs<NoteHeader> args)
         {
             CurrentNoteId = args.Data.Id;
             StateHasChanged();
         }
 
+        /// <summary>
+        /// Goto a specific note
+        /// </summary>
+        /// <param name="Id"></param>
         public void GotoNote(long Id)
         {
             CurrentNoteId = Id;
             StateHasChanged();
         }
 
+        /// <summary>
+        /// Goto the listing mode from note display mode
+        /// </summary>
         public void Listing()
         {
             CurrentNoteId = 0;
             StateHasChanged();
         }
 
+        /// <summary>
+        /// Get the next base note header given the current one
+        /// </summary>
+        /// <param name="oh"></param>
+        /// <returns></returns>
         public long GetNextBaseNote(NoteHeader oh)
         {
             long newId = 0;
@@ -119,6 +201,11 @@ namespace Notes2022.RCL.User
             return newId;
         }
 
+        /// <summary>
+        /// Get the nest note given the current one
+        /// </summary>
+        /// <param name="oh"></param>
+        /// <returns></returns>
         public long GetNextNote(NoteHeader oh)
         {
             long newId = 0;
@@ -131,6 +218,11 @@ namespace Notes2022.RCL.User
             return newId;
         }
 
+        /// <summary>
+        /// Get the previous base note
+        /// </summary>
+        /// <param name="oh"></param>
+        /// <returns></returns>
         public long GetPreviousBaseNote(NoteHeader oh)
         {
             long newId = 0;
@@ -140,6 +232,11 @@ namespace Notes2022.RCL.User
             return newId;
         }
 
+        /// <summary>
+        /// Get the previous note
+        /// </summary>
+        /// <param name="oh"></param>
+        /// <returns></returns>
         public long GetPreviousNote(NoteHeader oh)
         {
             long newId = 0;
@@ -152,17 +249,32 @@ namespace Notes2022.RCL.User
             return newId;
         }
 
+        /// <summary>
+        /// Get just the response headers for the given noteid
+        /// </summary>
+        /// <param name="headerId"></param>
+        /// <returns></returns>
         public List<NoteHeader> GetResponseHeaders(long headerId)
         {
             return Model.AllNotes.Where(p => p.BaseNoteId == headerId && (p.ResponseOrdinal != 0) && p.IsDeleted == false && p.Version == 0)
                 .OrderBy(p => p.ResponseOrdinal).ToList();
         }
 
+        /// <summary>
+        /// Get the Index model - used by the NotePanel
+        /// </summary>
+        /// <returns></returns>
         public NoteDisplayIndexModel GetModel()
         {
             return Model;
         }
 
+        /// <summary>
+        /// Get note header Id given note ordinal and response ordinal
+        /// </summary>
+        /// <param name="noteOrd"></param>
+        /// <param name="respOrd"></param>
+        /// <returns></returns>
         public long GetNoteHeaderId(int noteOrd, int respOrd)
         {
             long newId = 0;
@@ -183,8 +295,19 @@ namespace Notes2022.RCL.User
             return newId;
         }
 
+        /// <summary>
+        /// Search results
+        /// </summary>
         private List<NoteHeader> results { get; set; }
+
+        /// <summary>
+        /// Are we searching?
+        /// </summary>
         private bool isSearch { get; set; }
+
+        /// <summary>
+        /// Temp used for navigation
+        /// </summary>
         private long mode { get; set; }
 
 
@@ -264,7 +387,7 @@ namespace Notes2022.RCL.User
             StateHasChanged();
         }
 
-            protected async Task SearchHeader(Search target)
+        protected async Task SearchHeader(Search target)
         {
             results = new List<NoteHeader>();
             List<NoteHeader> lookin = Model.AllNotes;
@@ -275,7 +398,7 @@ namespace Notes2022.RCL.User
                 switch (target.Option)
                 {
                     case SearchOption.Author:
-                        isMatch = nh.AuthorName.Contains(target.Text);
+                        isMatch = nh.AuthorName.ToLower().Contains(target.Text);
                         break;
                     case SearchOption.Title:
                         isMatch = nh.NoteSubject.ToLower().Contains(target.Text);
@@ -416,9 +539,15 @@ namespace Notes2022.RCL.User
             await sessionStorage.SetItemAsync("IndexPage", sfGrid1.PageSettings.CurrentPage);
         }
 
+        /// <summary>
+        /// Potential navigation event when ever a key up occurs
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         private async Task KeyUpHandler(KeyboardEventArgs args)
         {
-
+            // handle single key press events
+            // call up into the menu to execute
             switch (NavString)
             {
                 case "L":
@@ -485,6 +614,9 @@ namespace Notes2022.RCL.User
                     break;
             }
 
+            // Enter press - look for processing
+            // Look at NotePanel documentation for how this is processed...
+            // It's more involved there anyway...
             if (args.Key == "Enter")
             {
                 if (!string.IsNullOrEmpty(NavString))
@@ -547,12 +679,20 @@ namespace Notes2022.RCL.User
             }
         }
 
+        /// <summary>
+        /// Accumulate input
+        /// </summary>
+        /// <param name="args"></param>
         private async void NavInputHandler(InputEventArgs args)
         {
             NavString = args.Value;
             await Task.CompletedTask;
         }
 
+        /// <summary>
+        /// Clear accumulated input
+        /// </summary>
+        /// <returns></returns>
         private async Task ClearNav()
         {
             NavString = null;
@@ -560,6 +700,10 @@ namespace Notes2022.RCL.User
             await Task.CompletedTask;
         }
 
+        /// <summary>
+        /// Handle state change for expand all switch
+        /// </summary>
+        /// <param name="args"></param>
         private async void ExpandAllChange(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> args)
         {
             if (ExpandAll)
@@ -572,6 +716,10 @@ namespace Notes2022.RCL.User
             }
         }
 
+        /// <summary>
+        /// Shows a simple text message dialog
+        /// </summary>
+        /// <param name="message"></param>
         private void ShowMessage(string message)
         {
             var parameters = new ModalParameters();

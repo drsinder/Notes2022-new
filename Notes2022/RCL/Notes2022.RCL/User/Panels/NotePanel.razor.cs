@@ -37,44 +37,118 @@ using System.Timers;
 
 namespace Notes2022.RCL.User.Panels
 {
+    /// <summary>
+    /// This panel is an optionally hidden panel that resides inside the note index.
+    /// The index replaces itself with this panel when the user selects a note to
+    /// view.  This allows the index and note panel to share data and communicate
+    /// with each other more readily.
+    /// </summary>
     public partial class NotePanel
     {
+        /// <summary>
+        /// For Dialogs
+        /// </summary>
         [CascadingParameter] public IModalService Modal { get; set; }
 
+        /// <summary>
+        /// Our current NoteId
+        /// </summary>
         [Parameter] public long NoteId { get; set; }
+
+        /// <summary>
+        /// Whether or not child windows should be shown.  These might include
+        /// Responses, versions, references.
+        /// </summary>
         [Parameter] public bool ShowChild { get; set; }
+
+        /// <summary>
+        /// Is this at the "root" of something
+        /// </summary>
         [Parameter] public bool IsRootNote { get; set; }
+
+        /// <summary>
+        /// Should optional buttons be shown
+        /// </summary>
         [Parameter] public bool ShowButtons { get; set; } = true;
+
+        /// <summary>
+        /// Is this panel to be shown in the alternate style?
+        /// </summary>
         [Parameter] public bool AltStyle { get; set; }
+
+        /// <summary>
+        /// Should certain functions be suppressed at head and tail of panel
+        /// </summary>
         [Parameter] public bool IsMini { get; set; }
+
+        /// <summary>
+        /// Are we showing history versions
+        /// </summary>
         [Parameter] public int Vers { get; set; } = 0;
+
+        /// <summary>
+        /// Who is my container
+        /// </summary>
         [Parameter] public NoteIndex MyNoteIndex { get; set; }
 
+        /// <summary>
+        /// List of responses
+        /// </summary>
         protected List<NoteHeader> respHeaders { get; set; }
 
-        //[Parameter] public string MyStyle { get; set; }
-
+        /// <summary>
+        /// Header style string
+        /// </summary>
         protected string HeaderStyle { get; set; }
+
+        /// <summary>
+        /// Body style string
+        /// </summary>
         protected string BodyStyle { get; set; }
 
+        /// <summary>
+        /// Are responses shown
+        /// </summary>
         protected bool RespShown { get; set; }
-        //protected bool? RespShownSw { get; set; }
 
+        /// <summary>
+        /// Is the order of responses flipped?
+        /// </summary>
         protected bool RespFlipped { get; set; }
 
+        /// <summary>
+        /// Should the typing box "eat" the next enter key?
+        /// </summary>
         protected bool EatEnter { get; set; }
 
+        /// <summary>
+        /// Are we showing version history?
+        /// </summary>
         protected bool ShowVers { get; set; } = false;
 
+        /// <summary>
+        /// Are we sequencing?
+        /// </summary>
         protected bool IsSeq { get; set; }
 
-        //protected PrismJsInterop Prism { get; set; }    
-
+        /// <summary>
+        /// Data Model for Note display
+        /// </summary>
         protected DisplayModel model { get; set; }
 
+        /// <summary>
+        /// Reference to our menu so we can talk to it
+        /// </summary>
         public NoteMenu MyMenu { get; set; }
 
+        /// <summary>
+        /// Reference to our fancy html editor
+        /// </summary>
         SfTextBox sfTextBox { get; set; }
+
+        /// <summary>
+        /// Accumulator for the typin nav box
+        /// </summary>
         public string NavString { get; set; }
         //public string NavCurrentVal { get; set; }
 
@@ -84,15 +158,22 @@ namespace Notes2022.RCL.User.Panels
 
         [Inject] HttpClient Http { get; set; }
         [Inject] NavigationManager Navigation { get; set; }
-        [Inject] IJSRuntime JS { get; set; }
+        [Inject] IJSRuntime JS { get; set; }    // enables calling javascript
         [Inject] Blazored.SessionStorage.ISessionStorageService sessionStorage { get; set; }
 
+        /// <summary>
+        /// Initialize defaults for a "root" note - not showing children
+        /// </summary>
         public NotePanel()
         {
             ShowChild = false;
             IsRootNote = true;
         }
 
+        /// <summary>
+        /// Get our data and set IsSeq flag from state
+        /// </summary>
+        /// <returns></returns>
         protected override async Task OnParametersSetAsync()
         {
             await GetData();
@@ -100,10 +181,15 @@ namespace Notes2022.RCL.User.Panels
             IsSeq = await sessionStorage.GetItemAsync<bool>("IsSeq");
         }
 
+        /// <summary>
+        /// Get data for note
+        /// </summary>
+        /// <returns></returns>
         protected async Task GetData()
         {
             RespShown = false;
 
+            //Set style for note and header
             HeaderStyle = "noteheader";
             BodyStyle = "notebody";
 
@@ -113,6 +199,8 @@ namespace Notes2022.RCL.User.Panels
                 BodyStyle += "-alt";
             }
 
+            // Get data from the server - just the content -
+            // we already have the header in the container (index)
             model = await DAL.GetNoteContent(Http, NoteId, Vers);
 
             // set text to be displayed re responses
@@ -139,14 +227,24 @@ namespace Notes2022.RCL.User.Panels
         //    Navigation.NavigateTo("newnote/" + model.noteFile.Id + "/" + bnId + "/" + model.header.Id);
         //}
 
+        /// <summary>
+        /// Handle change of responses shown switch
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         private async Task ShowRespChange(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> args)
         {
             if (RespShown)
             {
+                // Get response headers from the index
                 respHeaders = MyNoteIndex.GetResponseHeaders(model.header.Id);
             }
         }
 
+        /// <summary>
+        /// Change the order of shown responses
+        /// </summary>
+        /// <param name="args"></param>
         private void FlipRespChange(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> args)
         {
             if (RespFlipped)
@@ -155,23 +253,35 @@ namespace Notes2022.RCL.User.Panels
                 respHeaders = respHeaders.OrderBy(x => x.ResponseOrdinal).ToList();
         }
 
+        /// <summary>
+        /// Return to index mode...
+        /// </summary>
+        /// <param name="args"></param>
         private void OnDone(MouseEventArgs args)
         {
             MyNoteIndex.Listing();
         }
 
+        /// <summary>
+        /// Print the note
+        /// </summary>
+        /// <param name="args"></param>
         private async void OnPrint(MouseEventArgs args)
         {
             await PrintString(false);
         }
 
+        /// <summary>
+        /// Print the whole string
+        /// </summary>
+        /// <param name="args"></param>
         private async void OnPrintString(MouseEventArgs args)
         {
             await PrintString(true);
         }
 
         /// <summary>
-        /// Print a whole file if PrintFile is true
+        /// Print a whole string if wholeString is true
         /// </summary>
         protected async Task PrintString(bool wholeString)
         {
@@ -239,6 +349,10 @@ namespace Notes2022.RCL.User.Panels
             Modal.Show<PrintDlg>("", parameters);   // invloke print dialog with our output
         }
 
+        /// <summary>
+        /// collect input and clear EatEnter
+        /// </summary>
+        /// <param name="args"></param>
         private async void NavInputHandler(InputEventArgs args)
         {
             NavString = args.Value;
@@ -246,12 +360,23 @@ namespace Notes2022.RCL.User.Panels
             EatEnter = false;
         }
 
+        /// <summary>
+        /// Clear the NavString
+        /// </summary>
+        /// <returns></returns>
         private async Task ClearNav()
         {
             NavString = null;
             await Task.CompletedTask;
         }
 
+        /// <summary>
+        /// Protential to do something when a key up event happens
+        /// Handle single key press commands right away.  Otherwise
+        /// let input accumulate.
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         private async Task KeyUpHandler(KeyboardEventArgs args)
         {
             switch (NavString)
@@ -332,36 +457,38 @@ namespace Notes2022.RCL.User.Panels
                     }
                     return;
 
-
                 default:
                     break;
             }
 
-            if (args.Key == "Enter" && EatEnter)
+            if (args.Key == "Enter" && EatEnter) // Ignore this next Enter key!
             {
                 EatEnter = false;
                 return;
             }
 
-            if (args.Key == "Enter")
+            if (args.Key == "Enter")    // handle enter key
             {
+                // lone enter shifted enter key -> Next Base Note
                 if (args.ShiftKey && string.IsNullOrEmpty(NavString))
                 {
                     await MyMenu.ExecMenu("NextBase");
                     await ClearNav();
                     return;
                 }
+                // - plus shift enter -> previous base note
                 else if (args.ShiftKey && NavString == "-")
                 {
                     await MyMenu.ExecMenu("PreviousBase");
                     return;
                 }
+                // - plus enter -> previous note
                 else if (NavString == "-")
                 {
                     await MyMenu.ExecMenu("PreviousNote");
                     return;
                 }
-
+                // lone enter enter key -> Next Note
                 else if (string.IsNullOrEmpty(NavString))
                 {
                     await MyMenu.ExecMenu("NextNote");
@@ -369,36 +496,53 @@ namespace Notes2022.RCL.User.Panels
                     return;
                 }
 
+                // now handle more complex entries
+                //
+                // cases:
+                // #
+                // #.#
+                // .#
+                // +#
+                // -#
+                // +.#
+                // -.#
+                // +#.#
+                // -#.#
+                //
                 bool IsPlus = false;
                 bool IsMinus = false;
                 bool IsRespOnly = false;
 
+                // Ignore ; and spaces
                 string stuff = NavString.Replace(";", "").Replace(" ", "");
 
+                // check for modifier prefixes + and -
                 if (stuff.StartsWith("+"))
                     IsPlus = true;
                 if (stuff.StartsWith("-"))
                     IsMinus = true;
 
+                // now strip the modifiers that we have recorded them
                 stuff = stuff.Replace("+", "").Replace("-", "");
 
+                // . implies we are working on response navigation
                 if (stuff.StartsWith('.'))
                 {
                     await ClearNav();
                     IsRespOnly = true;
-                    stuff = stuff.Replace(".", "");
+                    stuff = stuff.Replace(".", ""); // strip the .
                 }
-                // parse string for # or #.#
 
+                // parse string for # or #.#
                 string[] parts = stuff.Split('.');
                 if (parts.Length > 2)
                 {
                     ShowMessage("Too many '.'s : " + parts.Length);
                 }
                 int noteNum;
-                if (parts.Length == 1)
+                if (parts.Length == 1)  // dealing with single number
                 {
-                    if (!int.TryParse(parts[0], out noteNum))
+                    if (!int.TryParse(parts[0], out noteNum))   // try to get value
                     {
                         await ClearNav();
                         EatEnter = true;
@@ -406,22 +550,23 @@ namespace Notes2022.RCL.User.Panels
                     }
                     else
                     {
-                        if (!IsRespOnly)
+                        if (!IsRespOnly) // dealing with notes not responses
                         {
-                            if (IsPlus)
+                            if (IsPlus) // add or subtract based on prefix if any
                                 noteNum = model.header.NoteOrdinal + noteNum;
                             else if (IsMinus)
                                 noteNum = model.header.NoteOrdinal - noteNum;
                         }
-                        else
+                        else // dealing with responses
                         {
-                            if (IsPlus)
+                            if (IsPlus)  // add or subtract based on prefix if any
                                 noteNum = model.header.ResponseOrdinal + noteNum;
                             else if (IsMinus)
                                 noteNum = model.header.ResponseOrdinal - noteNum;
 
+                            // look for target response
                             long headerId2 = MyNoteIndex.GetNoteHeaderId(model.header.NoteOrdinal, noteNum);
-                            if (headerId2 != 0)
+                            if (headerId2 != 0) // found it!  Get the data and re-render page
                             {
                                 NoteId = headerId2;
                                 await GetData();
@@ -431,8 +576,9 @@ namespace Notes2022.RCL.User.Panels
                                 ShowMessage("Could not find note : " + NavString);
                             return;
                         }
+                        // look for note
                         long headerId = MyNoteIndex.GetNoteHeaderId(noteNum, 0);
-                        if (headerId != 0)
+                        if (headerId != 0) // found it!  Get the data and re-render page
                         {
                             NoteId = headerId;
                             await GetData();
@@ -444,7 +590,7 @@ namespace Notes2022.RCL.User.Panels
                         return;
                     }
                 }
-                else if (parts.Length == 2)
+                else if (parts.Length == 2)     // #.# entered - direct nav
                 {
                     if (!int.TryParse(parts[0], out noteNum))
                     {
@@ -460,12 +606,13 @@ namespace Notes2022.RCL.User.Panels
                     if (noteNum != 0 && noteRespOrd != 0)
                     {
                         {
-                            if (IsPlus)
+                            if (IsPlus)     // relative nav forward
                                 noteNum = model.header.NoteOrdinal + noteNum;
-                            else if (IsMinus)
+                            else if (IsMinus) // relative nav backward
                                 noteNum = model.header.NoteOrdinal - noteNum;
+                            // attempt to get note
                             long headerId2 = MyNoteIndex.GetNoteHeaderId(noteNum, 0);
-                            if (headerId2 != 0)
+                            if (headerId2 != 0) // found it!  Get the data and re-render page
                             {
                                 NoteId = headerId2;
                                 await GetData();
@@ -473,7 +620,6 @@ namespace Notes2022.RCL.User.Panels
                             }
                             else
                                 ShowMessage("Could not find note : " + NavString);
-
                         }
                         long headerId = MyNoteIndex.GetNoteHeaderId(noteNum, noteRespOrd);
                         if (headerId != 0)
@@ -490,6 +636,10 @@ namespace Notes2022.RCL.User.Panels
             }
         }
 
+        /// <summary>
+        /// GET next matching item from search
+        /// </summary>
+        /// <returns></returns>
         protected async Task NextSearch()
         {
             bool InSearch = await sessionStorage.GetItemAsync<bool>("InSearch");
@@ -518,7 +668,10 @@ namespace Notes2022.RCL.User.Panels
             }
         }
 
-
+        /// <summary>
+        /// Find next recent note
+        /// </summary>
+        /// <returns></returns>
         protected async Task SeqNext()
         {
             if (!IsSeq)
@@ -587,7 +740,7 @@ namespace Notes2022.RCL.User.Panels
         {
             await base.OnAfterRenderAsync(firstRender);
 
-            if (firstRender)
+            if (firstRender)    // load the prism script
             {
                 module = await JS.InvokeAsync<IJSObjectReference>("import",
                     "./prism.min.js");
@@ -600,7 +753,7 @@ namespace Notes2022.RCL.User.Panels
                     //await Task.Delay(300);
                     await sfTextBox.FocusAsync();
                 }
-                if (module is not null)
+                if (module is not null) // highight inserted code with prism script
                 {
                     await module.InvokeVoidAsync("doPrism", "x");
                 }

@@ -31,7 +31,8 @@ else
     <div>
         @if (Headers.Count > 0)
         {
-            <span>Show Response Content on Expand&nbsp; <SfSwitch @bind-Checked="@ShowContent"></SfSwitch>&nbsp; Expand All&nbsp; <SfSwitch @bind-Checked="@ExpandAll" ValueChange="ExpandAllChange" TChecked="bool"></SfSwitch></span>
+            <span>Show Response Content on Expand&nbsp; <SfSwitch @bind-Checked="@ShowContent"></SfSwitch>&nbsp; Expand All&nbsp; 
+                <SfSwitch @bind-Checked="@ExpandAll" ValueChange="ExpandAllChange" TChecked="bool"></SfSwitch></span>
         }
     </div>
     @if (Headers.Count > 0)

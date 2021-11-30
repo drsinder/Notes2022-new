@@ -21,9 +21,10 @@
     **  If not, see <http://www.gnu.org/licenses/gpl-3.0.txt>.
     **
     **--------------------------------------------------------------------------*@
-
+  
+<span class="clockcolor">@mytime &nbsp;</span>
 <div class="top-row ps-4 navbar">
-    <SfMenu Items="@menuItemsTop" @ref="@topMenu" CssClass="e-std-menu" ShowItemOnClick="true">
+    <SfMenu Items="@menuItemsTop" @ref="@topMenu" CssClass="e-std-menu" >
             <MenuEvents TValue="MenuItem" ItemSelected="@OnSelect" ></MenuEvents>
     </SfMenu>
     <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">

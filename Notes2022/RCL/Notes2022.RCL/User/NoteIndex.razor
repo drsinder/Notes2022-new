@@ -26,10 +26,11 @@
 @using Syncfusion.Blazor.Grids
 @using Syncfusion.Blazor.Buttons
 
-@if (CurrentNoteId > 0)
+@if (CurrentNoteId > 0) @*    Note display mode *@
 {
-    <NotePanel NoteId="@CurrentNoteId" ShowChild="false" IsRootNote="true" MyNoteIndex="@this"></NotePanel>}
-else
+    <NotePanel NoteId="@CurrentNoteId" ShowChild="false" IsRootNote="true" MyNoteIndex="@this"></NotePanel>
+}
+else                    @*    Index mode        *@
 {
     <h3>Note Index</h3>
 
@@ -40,7 +41,7 @@ else
     else
     {
         <p>@Model.message</p>
-        <h3 class="center">@Model.noteFile.NoteFileTitle - @Model.noteFile.NoteFileName</h3>
+        <h3 class="center">@Model.noteFile.NoteFileTitle - @Model.noteFile.NoteFileName  @Model.message</h3>
 
         <div>
             <ListMenu Model=@Model Caller="@this" @ref="@MyMenu"></ListMenu>

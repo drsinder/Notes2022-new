@@ -28,13 +28,18 @@ using System.Net.Http.Json;
 
 namespace Notes2022.RCL.User.Panels
 {
+    /// <summary>
+    /// Displays versions for edited notes
+    /// </summary>
     public partial class Versions
     {
+        /// <summary>
+        /// These four parameters identify the note
+        /// </summary>
         [Parameter] public int FileId { get; set; }
         [Parameter] public int NoteOrdinal { get; set; }
         [Parameter] public int ResponseOrdinal { get; set; }
         [Parameter] public int ArcId { get; set; }
-
 
         protected List<NoteHeader> Headers { get; set; }
 

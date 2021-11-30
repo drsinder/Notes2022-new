@@ -1,38 +1,75 @@
-﻿//using Grpc.Net.Client;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Notes2022.Shared;
 using System.Net.Http.Json;
+using System.Timers;
 
 namespace Notes2022.RCL.User
 {
     public partial class Index
     {
+        /// <summary>
+        /// Alternate name for NoteFile
+        /// </summary>
         private class localFile : NoteFile
         {
         }
 
         [Parameter] public bool IsPreview { get; set; } = false;
 
+        /// <summary>
+        /// Place holder
+        /// </summary>
         private localFile dummyFile = new localFile { Id = 0, NoteFileName = " ", NoteFileTitle = " " };
+
+        /// <summary>
+        /// List of files ordered by filename
+        /// </summary>
         private List<localFile> fileList { get; set; }
+
+        /// <summary>
+        /// List of files ordered by title
+        /// </summary>
         private List<localFile> nameList { get; set; }
+
+        /// <summary>
+        /// Important file list
+        /// </summary>
         private List<localFile> impfileList { get; set; }
+
+        /// <summary>
+        /// History file list
+        /// </summary>
         private List<localFile> histfileList { get; set; }
 
+        /// <summary>
+        /// Model for communications between client and server
+        /// </summary>
         private HomePageModel? hpModel { get; set; }
+
+        /// <summary>
+        /// Current time
+        /// </summary>
         private DateTime mytime { get; set; }
 
+        // For clock update
+        private System.Timers.Timer timer2 { get; set; }
 
+        /// <summary>
+        /// For access to server via Http
+        /// </summary>
         [Inject] HttpClient Http { get; set; }
-        //[Inject] GrpcChannel Channel { get; set; }
         [Inject] AuthenticationStateProvider AuthProv { get; set; }
         [Inject] NavigationManager Navigation { get; set; }
         [Inject] Blazored.SessionStorage.ISessionStorageService sessionStorage { get; set; }
-        public Index()
+        public Index()  // Needed for above Injection
         {
         }
 
+        /// <summary>
+        /// Called by framework when parameters haev been set.  Time to go get data.
+        /// </summary>
+        /// <returns></returns>
         protected override async Task OnParametersSetAsync()
         {
             fileList = new List<localFile>();
@@ -45,9 +82,11 @@ namespace Notes2022.RCL.User
             if (IsPreview)
                 return;
 
+            // See if user is authenticated
             AuthenticationState authstate = await AuthProv.GetAuthenticationStateAsync();
-            if (authstate.User.Identity.IsAuthenticated)
+            if (authstate.User.Identity.IsAuthenticated) // Yes, get and set data.
             {
+                // Set and reset local state vars
                 await sessionStorage.SetItemAsync<int>("ArcId", 0);
                 await sessionStorage.SetItemAsync<int>("IndexPage", 1);
 
@@ -66,8 +105,9 @@ namespace Notes2022.RCL.User
 
                 try
                 {
-                    hpModel = await DAL.GetHomePageData(Http);
+                    hpModel = await DAL.GetHomePageData(Http);  // get our data from server
 
+                    // Order files by name and title
                     List<NoteFile> fileList1 = hpModel.NoteFiles.OrderBy(p => p.NoteFileName).ToList();
                     List<NoteFile> nameList1 = hpModel.NoteFiles.OrderBy(p => p.NoteFileTitle).ToList();
                     histfileList = new List<localFile>();
@@ -81,6 +121,7 @@ namespace Notes2022.RCL.User
                         fileList.Add(work);
                         nameList.Add(work2);
 
+                        // handle special important and history files
                         string fname = work.NoteFileName;
                         if (fname == "Opbnotes" || fname == "Gnotes")
                             histfileList.Add(work);
@@ -93,6 +134,24 @@ namespace Notes2022.RCL.User
             }
         }
 
+        /// <summary>
+        /// Update the clock once per second
+        /// </summary>
+        /// <param name="firstRender"></param>
+        protected override void OnAfterRender(bool firstRender)
+        {
+            if (firstRender)
+            {
+                timer2 = new System.Timers.Timer(1000);
+                timer2.Elapsed += TimerTick2;
+                timer2.Enabled = true;
+            }
+        }
+
+        /// <summary>
+        /// Handle typed in file name
+        /// </summary>
+        /// <param name="value"></param>
         protected void TextHasChanged(string value)
         {
             value = value.Trim().Replace("'\n", "").Replace("'\r", "").Replace(" ", "");
@@ -103,12 +162,18 @@ namespace Notes2022.RCL.User
                 {
                     if (value == item.NoteFileName)
                     {
-                        Navigation.NavigateTo("noteindex/" + item.Id);
+                        Navigation.NavigateTo("noteindex/" + item.Id); // goto the file
                         return;
                     }
                 }
             }
             catch { }
+        }
+
+        protected void TimerTick2(Object source, ElapsedEventArgs e)
+        {
+            mytime = DateTime.Now;
+            StateHasChanged();
         }
     }
 }

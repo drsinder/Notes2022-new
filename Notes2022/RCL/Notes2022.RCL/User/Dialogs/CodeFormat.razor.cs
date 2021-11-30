@@ -8,6 +8,9 @@ using System.Web;
 
 namespace Notes2022.RCL.User.Dialogs
 {
+    /// <summary>
+    /// Prepare a block of code for insertion
+    /// </summary>
     public partial class CodeFormat
     {
         [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
@@ -73,6 +76,13 @@ namespace Notes2022.RCL.User.Dialogs
             await ModalInstance.CloseAsync(ModalResult.Ok(message));
         }
 
+        /// <summary>
+        /// Surround user provided code with some html <pre> and <code> for prism
+        /// highlighting
+        /// </summary>
+        /// <param name="stuff2"></param>
+        /// <param name="codeType"></param>
+        /// <returns></returns>
         private string MakeCode(string stuff2, string codeType)
         {
             StringBuilder sb = new StringBuilder();

@@ -4,12 +4,21 @@ using System.Net.Http.Json;
 
 namespace Notes2022.RCL.User
 {
+    /// <summary>
+    /// Setup for calling note editor panel to edit an existing note
+    /// </summary>
     public partial class EditNote
     {
         [Parameter] public long NoteId { get; set; }   //  what we are editing
 
+        /// <summary>
+        /// our data for the note in edit model
+        /// </summary>
         protected TextViewModel Model { get; set; } = new TextViewModel();
 
+        /// <summary>
+        /// A note display model
+        /// </summary>
         protected DisplayModel stuff { get; set; }
 
         [Inject] HttpClient Http { get; set; }
@@ -17,6 +26,7 @@ namespace Notes2022.RCL.User
         {
         }
 
+        // get all the data
         protected override async Task OnParametersSetAsync()
         {
             stuff = await DAL.GetNoteContent(Http, NoteId);

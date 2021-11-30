@@ -40,17 +40,6 @@ else
         <Authorized>
             <div>
                 <h2>Preferences</h2>
- @*               <h2>Set Time Zone</h2>
-        <h5>
-            @currentText<br/>Your Device: @TimeZone
-        </h5>
-        <p>Select your Time Zone (So Time Zone Name is displayed correctly):</p>
-        <select class="form-control medium-input" @bind="@myZid">
-            @foreach (LocalModel item in MyList)
-            {
-                <option value="@item.Id">@item.Name</option>
-            }
-        </select>*@
                 <br />
                 <p>Default Page Size for Pageable Lists:</p>
                 <select class="form-control short-input" @bind="@pageSize">
@@ -60,22 +49,10 @@ else
                     }
                 </select>
                 <br />
-                @*<EjsSwitch @bind-Checked="@UserData.Pref1"></EjsSwitch> Use scrolling index rather than paged
-        <br />*@
-                @*<EjsSwitch @bind-Checked="@UserData.Pref2"></EjsSwitch> Use Non-Dialog note editor - Lets you browse uploaded images
-        <br />*@
-@*                <SfSwitch @bind-Checked="@UserData.Pref6"></SfSwitch> Use Syncfusion note editor - Lets you paste from Word
-                <br />
-*@                
                 <SfSwitch @bind-Checked="@UserData.Pref7"></SfSwitch> Show Content on index by default when expanded
                 <br />
                 <SfSwitch @bind-Checked="@UserData.Pref3"></SfSwitch> Show Responses by default
                 <br />
-@*                <SfSwitch @bind-Checked="@UserData.Pref5"></SfSwitch> Show Expandable Responses
-                <br />
-                <SfSwitch @bind-Checked="@UserData.Pref4"></SfSwitch> Show Multiple Expandable Responses
-                <br />
-*@
                 <button type="button" @onclick="OnSubmit" class="btn btn-info btn-sm">Submit</button>&nbsp;&nbsp;
                 <button type="button" @onclick="Cancel" class="btn btn-info btn-sm">Close</button>
 

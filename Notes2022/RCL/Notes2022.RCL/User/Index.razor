@@ -23,11 +23,8 @@
     **--------------------------------------------------------------------------*@
 
 <PageTitle>Notes 2022 Index</PageTitle>
-
 <h2 class="center">Welcome to Notes 2022 @Globals.UserData?.DisplayName <img src="favicon.ico" width="32" /></h2>
-
 <div>
-
     @if (false && hpModel == null)
     {
         <p class=""><em>Loading...</em></p>
@@ -39,7 +36,6 @@
                 @mytime
             </span>
         </h5>
-
         @if (hpModel != null && !string.IsNullOrEmpty(hpModel.Message))
         {
             <div>@((MarkupString)@hpModel.Message)</div>
@@ -51,7 +47,6 @@
     }
     else
     {
-        
         <AuthorizeView>
         <NotAuthorized>
             <p class="center"><strong>You are not logged in.  Please log in.  Register first if you need to.</strong></p>
@@ -105,7 +100,6 @@
                     </p>
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-md-2">
                 </div>
@@ -131,12 +125,8 @@
                         }
                     </ul>
                 </div>
-
             </div>
         </Authorized>
     </AuthorizeView>
-
-
 }
 </div>
-

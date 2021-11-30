@@ -23,7 +23,7 @@
 @using Syncfusion.Blazor.Popups
 
 <div class="top-row navbar-full-dark" >
-    <SfMenu Items="@menuItems" @ref="@topMenu" HamburgerMode="@HamburgerMode" CssClass="e-std-menu"  ShowItemOnClick="true">
+    <SfMenu Items="@menuItems" @ref="@topMenu" HamburgerMode="@HamburgerMode" CssClass="e-std-menu" >
         <MenuEvents TValue="MenuItem" ItemSelected="@OnSelect" >
         </MenuEvents>
     </SfMenu>

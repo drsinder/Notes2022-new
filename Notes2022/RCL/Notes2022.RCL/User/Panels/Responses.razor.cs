@@ -28,10 +28,24 @@ using Syncfusion.Blazor.Grids;
 
 namespace Notes2022.RCL.User.Panels
 {
+    /// <summary>
+    /// Shows note responses
+    /// </summary>
     public partial class Responses
     {
+        /// <summary>
+        /// List of response headers
+        /// </summary>
         [Parameter] public List<NoteHeader> Headers { get; set; }
+
+        /// <summary>
+        /// Show content for responses
+        /// </summary>
         [Parameter] public bool ShowContentR { get; set; }
+
+        /// <summary>
+        /// Expand all rows
+        /// </summary>
         [Parameter] public bool ExpandAllR { get; set; }
 
         public bool ShowContent { get; set; }
@@ -45,7 +59,11 @@ namespace Notes2022.RCL.User.Panels
         {
         }
 
-        protected override async Task OnInitializedAsync()
+        /// <summary>
+        /// Copy parameter to local copy
+        /// </summary>
+        /// <returns></returns>
+        protected override async Task OnParametersSetAsync()
         {
             ShowContent = ShowContentR;
             ExpandAll = ExpandAllR;
@@ -53,12 +71,17 @@ namespace Notes2022.RCL.User.Panels
 
         public void DataBoundHandler()
         {
+            // Expand if appropriate
             if (ExpandAll)
             {
                 sfGrid2.ExpandAllDetailRowAsync();
             }
         }
 
+        /// <summary>
+        /// Change of expand/collapse state
+        /// </summary>
+        /// <param name="args"></param>
         private async void ExpandAllChange(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> args)
         {
             if (ExpandAll)
@@ -70,6 +93,11 @@ namespace Notes2022.RCL.User.Panels
                 await sfGrid2.CollapseAllDetailRowAsync();
             }
         }
+
+        /// <summary>
+        /// GO show the note
+        /// </summary>
+        /// <param name="args"></param>
         protected void DisplayIt(RowSelectEventArgs<NoteHeader> args)
         {
             Navigation.NavigateTo("notedisplay/" + args.Data.Id);
