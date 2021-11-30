@@ -6,7 +6,6 @@ using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.ResponseCompression;
 
 // database providers
 
@@ -23,7 +22,6 @@ using Notes2022.Server;
 using Notes2022.Server.Data;
 using Notes2022.Server.Models;
 using Notes2022.Server.Services;
-//using ProtoBuf.Grpc.Server;
 
 /*
  *      Partial list of possible database providers
@@ -112,16 +110,6 @@ builder.Services.AddRazorPages();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
 
-
-//builder.Services.AddCodeFirstGrpc();
-
-//builder.Services.AddResponseCompression(opts =>
-//{
-//    opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
-//        new[] { "application/octet-stream" });
-//});
-
-
 Globals.StartupDateTime = DateTime.Now.ToUniversalTime();
 
 Globals.ProductionUrl = builder.Configuration["ProductionUrl"];
@@ -188,17 +176,6 @@ app.UseHangfireDashboard("/" + Globals.HangfireLoc, new DashboardOptions
 
 app.MapRazorPages();
 app.MapControllers();
-
-
-//app.UseGrpcWeb();
-
-//app.UseEndpoints(endpoints =>
-//{
-//    endpoints.MapGrpcService<Notes2022Service>().EnableGrpcWeb();
-
-//    endpoints.MapFallbackToFile("index.html");
-//});
-
 
 app.MapFallbackToFile("index.html");
 
